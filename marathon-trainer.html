@@ -38,7 +38,7 @@
       align-items: center;
       gap: 1rem;
     }
-    .logo { font-size: 2rem; }
+    .logo svg { display: block; }
     header h1 { font-size: 1.6rem; font-weight: 700; }
     header h1 span { color: var(--orange); }
     header p { color: var(--muted); font-size: 0.875rem; margin-top: 0.2rem; }
@@ -112,13 +112,15 @@
     .split-row input { text-align: center; }
     .split-sep { color: var(--muted); font-size: 0.85rem; white-space: nowrap; flex-shrink: 0; padding-top: 0.1rem; }
 
-    .start-chip {
+    .weeks-chip {
       font-size: 0.78rem;
       color: var(--muted);
-      margin-top: 0.4rem;
+      margin-top: 0.5rem;
       min-height: 1.1em;
     }
-    .start-chip span { color: var(--orange); font-weight: 600; }
+    .weeks-chip span { color: var(--orange); font-weight: 600; }
+    .weeks-chip.warn span { color: var(--yellow); }
+    .weeks-chip.error span { color: var(--red); }
 
     .btn {
       margin-top: 1.5rem;
@@ -319,7 +321,32 @@
 <body>
 
 <header>
-  <div class="logo">🏃</div>
+  <div class="logo">
+    <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="logoGrad" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#e8540a"/>
+          <stop offset="100%" stop-color="#ff7b39"/>
+        </linearGradient>
+      </defs>
+      <rect width="48" height="48" rx="13" fill="url(#logoGrad)"/>
+      <!-- Head -->
+      <circle cx="31" cy="10" r="4" fill="white"/>
+      <!-- Body leaning forward -->
+      <path d="M29 14 L23 24" stroke="white" stroke-width="2.8" stroke-linecap="round"/>
+      <!-- Forward arm -->
+      <path d="M27 18 L18 22" stroke="white" stroke-width="2.8" stroke-linecap="round"/>
+      <!-- Back arm -->
+      <path d="M28 16.5 L35 13" stroke="white" stroke-width="2.8" stroke-linecap="round"/>
+      <!-- Front leg (bent, stepping forward) -->
+      <path d="M23 24 L16 34 L13 40" stroke="white" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+      <!-- Back leg (pushing off) -->
+      <path d="M23 24 L28 33 L33 37" stroke="white" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+      <!-- Motion lines -->
+      <line x1="9" y1="25" x2="16" y2="25" stroke="white" stroke-width="1.8" stroke-linecap="round" opacity="0.55"/>
+      <line x1="7" y1="30" x2="14" y2="30" stroke="white" stroke-width="1.8" stroke-linecap="round" opacity="0.35"/>
+    </svg>
+  </div>
   <div>
     <h1><span>Stride</span></h1>
     <p>Personalized training plans and paces for half marathons &amp; marathons</p>
@@ -382,9 +409,14 @@
       </div>
 
       <div class="field">
+        <label>Training Start Date</label>
+        <input type="date" id="start-date" onchange="updateWeeksChip()" />
+      </div>
+
+      <div class="field">
         <label>Race Date</label>
-        <input type="date" id="race-date" onchange="updateStartChip()" />
-        <div class="start-chip" id="start-chip"></div>
+        <input type="date" id="race-date" onchange="onRaceDateChange()" />
+        <div class="weeks-chip" id="weeks-chip"></div>
       </div>
 
     </div>
@@ -445,7 +477,7 @@ function setRaceType(type) {
   _raceType = type;
   document.getElementById('btn-half').classList.toggle('active', type === 'half');
   document.getElementById('btn-full').classList.toggle('active', type === 'full');
-  updateStartChip();
+  updateWeeksChip();
 }
 
 function fmtPace(totalSec) {
@@ -468,32 +500,55 @@ function switchTab(name) {
   document.getElementById(`tab-${name}`).classList.add('active');
 }
 
-function updateStartChip() {
+// Auto-fill start date when race date is picked (if start date is empty)
+function onRaceDateChange() {
   const raceDateVal = document.getElementById('race-date').value;
-  const chip = document.getElementById('start-chip');
-  if (!raceDateVal) { chip.innerHTML = ''; return; }
-  const cfg = RACE_CONFIG[_raceType];
-  const raceDate = new Date(raceDateVal + 'T00:00:00');
-  const startDate = new Date(raceDate);
-  startDate.setDate(raceDate.getDate() - cfg.weeks * 7);
-  chip.innerHTML = `Training starts <span>${startDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>`;
+  const startEl = document.getElementById('start-date');
+  if (raceDateVal && !startEl.value) {
+    const cfg = RACE_CONFIG[_raceType];
+    const raceDate = new Date(raceDateVal + 'T00:00:00');
+    const startDate = new Date(raceDate);
+    startDate.setDate(raceDate.getDate() - cfg.weeks * 7);
+    startEl.value = startDate.toISOString().split('T')[0];
+  }
+  updateWeeksChip();
+}
+
+// Show week count chip below race date
+function updateWeeksChip() {
+  const startVal = document.getElementById('start-date').value;
+  const raceVal  = document.getElementById('race-date').value;
+  const chip = document.getElementById('weeks-chip');
+  if (!startVal || !raceVal) { chip.innerHTML = ''; chip.className = 'weeks-chip'; return; }
+  const diff = Math.round((new Date(raceVal + 'T00:00:00') - new Date(startVal + 'T00:00:00')) / (7 * 86400000));
+  if (diff <= 0) {
+    chip.className = 'weeks-chip error';
+    chip.innerHTML = '<span>Race date must be after start date</span>';
+  } else if (diff < 6) {
+    chip.className = 'weeks-chip warn';
+    chip.innerHTML = `<span>${diff} week${diff !== 1 ? 's' : ''}</span> — too short, aim for 8+ weeks`;
+  } else {
+    chip.className = 'weeks-chip';
+    chip.innerHTML = `<span>${diff} week${diff !== 1 ? 's' : ''}</span> of training`;
+  }
 }
 
 function generate() {
-  const gender      = document.getElementById('gender').value;
-  const heightFt    = parseInt(document.getElementById('height-ft').value) || 0;
-  const heightIn    = parseInt(document.getElementById('height-in').value) || 0;
-  const weight      = parseFloat(document.getElementById('weight').value);
-  const pMin        = parseInt(document.getElementById('pace-min').value);
-  const pSec        = parseInt(document.getElementById('pace-sec').value) || 0;
-  const fitness     = document.getElementById('fitness').value;
-  const raceDateVal = document.getElementById('race-date').value;
+  const gender       = document.getElementById('gender').value;
+  const heightFt     = parseInt(document.getElementById('height-ft').value) || 0;
+  const heightIn     = parseInt(document.getElementById('height-in').value) || 0;
+  const weight       = parseFloat(document.getElementById('weight').value);
+  const pMin         = parseInt(document.getElementById('pace-min').value);
+  const pSec         = parseInt(document.getElementById('pace-sec').value) || 0;
+  const fitness      = document.getElementById('fitness').value;
+  const startDateVal = document.getElementById('start-date').value;
+  const raceDateVal  = document.getElementById('race-date').value;
 
   const errEl = document.getElementById('error-msg');
   errEl.style.display = 'none';
 
-  if (!heightFt || !weight || !pMin || !raceDateVal) {
-    errEl.textContent = 'Please fill in all fields.';
+  if (!heightFt || !weight || !pMin || !startDateVal || !raceDateVal) {
+    errEl.textContent = 'Please fill in all fields including start and race dates.';
     errEl.style.display = 'block'; return;
   }
   const heightInches = heightFt * 12 + heightIn;
@@ -506,20 +561,32 @@ function generate() {
     errEl.style.display = 'block'; return;
   }
 
+  const totalWeeks = Math.round(
+    (new Date(raceDateVal + 'T00:00:00') - new Date(startDateVal + 'T00:00:00')) / (7 * 86400000)
+  );
+  if (totalWeeks <= 0) {
+    errEl.textContent = 'Race date must be after training start date.';
+    errEl.style.display = 'block'; return;
+  }
+  if (totalWeeks < 6) {
+    errEl.textContent = 'You need at least 6 weeks of training. Try moving the start date earlier.';
+    errEl.style.display = 'block'; return;
+  }
+  if (totalWeeks > 52) {
+    errEl.textContent = 'Training plan can be at most 52 weeks. Try moving the start date later.';
+    errEl.style.display = 'block'; return;
+  }
+
   const paceSec = pMin * 60 + pSec;
   const cfg = RACE_CONFIG[_raceType];
-  const raceDate = new Date(raceDateVal + 'T00:00:00');
-  const startDate = new Date(raceDate);
-  startDate.setDate(raceDate.getDate() - cfg.weeks * 7);
-  const startDateStr = startDate.toISOString().split('T')[0];
 
-  _planData = { paceSec, fitness, startDateStr, raceDateVal, raceType: _raceType };
+  _planData = { paceSec, fitness, startDateStr: startDateVal, raceDateVal, raceType: _raceType, totalWeeks };
 
   document.getElementById('result-badge').textContent = fitness.charAt(0).toUpperCase() + fitness.slice(1);
   document.getElementById('result-race-badge').textContent = cfg.label;
 
   renderPace(paceSec, weight, heightInches, gender);
-  renderPlan(paceSec, fitness, startDateStr, raceDateVal);
+  renderPlan(paceSec, fitness, startDateVal, raceDateVal, totalWeeks);
 
   document.getElementById('results').style.display = 'block';
   document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -574,47 +641,48 @@ function renderPace(paceSec, weight, heightInches, gender) {
   `).join('');
 }
 
-function buildWeekSchedule(raceType, fitness) {
-  const cfg = RACE_CONFIG[raceType];
+function buildWeekSchedule(raceType, fitness, totalWeeks) {
+  const cfg  = RACE_CONFIG[raceType];
   const base = cfg.bases[fitness];
   const peak = cfg.peaks[fitness];
+  const raceMiles = raceType === 'full' ? 26 : 14;
   const weeks = [];
 
-  if (raceType === 'full') {
-    for (let w = 1; w <= 18; w++) {
-      let miles, phase, badge;
-      if (w <= 3)        { miles = base + (w-1)*2; phase='Build'; badge='badge-build'; }
-      else if (w <= 6)   { miles = base+6+(w-4)*3; phase='Build'; badge='badge-build'; }
-      else if (w <= 9)   { miles = w===9 ? base+6 : base+9+(w-7)*3; phase=w===9?'Recovery':'Build'; badge='badge-build'; }
-      else if (w <= 13)  { miles = w===13 ? base+10 : base+12+(w-10)*3; phase=w===13?'Recovery':'Build'; badge='badge-build'; }
-      else if (w === 14) { miles=peak; phase='Peak'; badge='badge-peak'; }
-      else if (w === 15) { miles=Math.round(peak*0.8); phase='Peak'; badge='badge-peak'; }
-      else if (w === 16) { miles=Math.round(peak*0.65); phase='Taper'; badge='badge-taper'; }
-      else if (w === 17) { miles=Math.round(peak*0.45); phase='Taper'; badge='badge-taper'; }
-      else               { miles=26; phase='Race Week!'; badge='badge-race'; }
-      weeks.push({ w, miles: Math.min(miles, peak), phase, badge });
+  const taperWeeks = totalWeeks >= 8 ? 2 : 1;
+  const peakWeeks  = totalWeeks >= 10 ? 2 : 1;
+
+  for (let w = 1; w <= totalWeeks; w++) {
+    const remaining = totalWeeks - w;
+    let miles, phase, badge;
+
+    if (remaining === 0) {
+      miles = raceMiles; phase = 'Race Week!'; badge = 'badge-race';
+    } else if (remaining <= taperWeeks) {
+      const t = remaining === 1 ? 0.65 : 0.45;
+      miles = Math.round(peak * t); phase = 'Taper'; badge = 'badge-taper';
+    } else if (remaining <= taperWeeks + peakWeeks) {
+      miles = remaining === taperWeeks + 1 ? peak : Math.round(peak * 0.85);
+      phase = 'Peak'; badge = 'badge-peak';
+    } else {
+      const buildTotal = totalWeeks - 1 - taperWeeks - peakWeeks;
+      const progress = buildTotal <= 1 ? 1 : (w - 1) / (buildTotal - 1);
+      const isStepback = w > 1 && w % 4 === 0;
+      const target = base + (peak * 0.92 - base) * Math.min(1, progress);
+      miles = Math.round(isStepback ? target * 0.8 : target);
+      phase = isStepback ? 'Recovery' : 'Build'; badge = 'badge-build';
     }
-  } else {
-    for (let w = 1; w <= 12; w++) {
-      let miles, phase, badge;
-      if (w <= 3)       { miles=base+(w-1)*2; phase='Build'; badge='badge-build'; }
-      else if (w <= 6)  { miles=base+6+(w-4)*2; phase='Build'; badge='badge-build'; }
-      else if (w <= 8)  { miles=w===8 ? base+6 : base+10+(w-7)*2; phase=w===8?'Recovery':'Build'; badge='badge-build'; }
-      else if (w === 9) { miles=peak; phase='Peak'; badge='badge-peak'; }
-      else if (w === 10){ miles=Math.round(peak*0.75); phase='Taper'; badge='badge-taper'; }
-      else if (w === 11){ miles=Math.round(peak*0.5); phase='Taper'; badge='badge-taper'; }
-      else              { miles=14; phase='Race Week!'; badge='badge-race'; }
-      weeks.push({ w, miles: Math.min(miles, peak), phase, badge });
-    }
+
+    weeks.push({ w, miles: Math.min(Math.max(miles, base - 4), peak), phase, badge });
   }
   return weeks;
 }
 
-function renderPlan(paceSec, fitness, startDateStr, raceDateVal) {
+function renderPlan(paceSec, fitness, startDateStr, raceDateVal, totalWeeks) {
   const cfg = RACE_CONFIG[_raceType];
-  const weeks = buildWeekSchedule(_raceType, fitness);
+  const weeks = buildWeekSchedule(_raceType, fitness, totalWeeks);
   const maxMiles = Math.max(...weeks.map(x => x.miles));
-  weeks.forEach(wk => { wk.runs = buildRuns(wk.miles, wk.w, paceSec, fitness, _raceType); });
+
+  weeks.forEach(wk => { wk.runs = buildRuns(wk.miles, wk.w, paceSec, fitness, _raceType, totalWeeks); });
 
   const sd = new Date(startDateStr + 'T00:00:00');
   const rd = new Date(raceDateVal + 'T00:00:00');
@@ -624,13 +692,13 @@ function renderPlan(paceSec, fitness, startDateStr, raceDateVal) {
 
   document.getElementById('plan-info').innerHTML = `
     <div class="plan-info-item"><div class="pi-label">Race</div><div class="pi-val">${cfg.label}</div></div>
-    <div class="plan-info-item"><div class="pi-label">Total Weeks</div><div class="pi-val">${cfg.weeks} Weeks</div></div>
+    <div class="plan-info-item"><div class="pi-label">Total Weeks</div><div class="pi-val">${totalWeeks} Weeks</div></div>
     <div class="plan-info-item"><div class="pi-label">Peak Mileage</div><div class="pi-val">${cfg.peaks[fitness]} mi/week</div></div>
-    <div class="plan-info-item"><div class="pi-label">Runs/Week</div><div class="pi-val">${fitness==='beginner'?4:fitness==='intermediate'?5:6}</div></div>
+    <div class="plan-info-item"><div class="pi-label">Runs/Week</div><div class="pi-val">${fitness === 'beginner' ? 4 : fitness === 'intermediate' ? 5 : 6}</div></div>
   `;
 
   document.getElementById('plan-grid').innerHTML = weeks.map(({ w, miles, phase, badge, runs }) => `
-    <div class="week-card ${phase==='Peak'?'peak':phase==='Taper'?'taper':phase==='Race Week!'?'race':''}">
+    <div class="week-card ${phase === 'Peak' ? 'peak' : phase === 'Taper' ? 'taper' : phase === 'Race Week!' ? 'race' : ''}">
       <div class="week-header">
         <div class="week-num">Week ${w}</div>
         <div class="week-badge ${badge}">${phase}</div>
@@ -639,23 +707,27 @@ function renderPlan(paceSec, fitness, startDateStr, raceDateVal) {
       <div class="week-runs">${runs}</div>
       <div class="week-bar-wrap">
         <div class="week-bar-bg">
-          <div class="week-bar-fill" style="width:${(miles/maxMiles*100).toFixed(1)}%"></div>
+          <div class="week-bar-fill" style="width:${(miles / maxMiles * 100).toFixed(1)}%"></div>
         </div>
       </div>
     </div>
   `).join('');
 }
 
-function buildRuns(totalMiles, week, paceSec, fitness, raceType) {
+function buildRuns(totalMiles, week, paceSec, fitness, raceType, totalWeeks) {
   const cfg = RACE_CONFIG[raceType];
-  const runsPerWeek = fitness==='beginner'?4:fitness==='intermediate'?5:6;
-  const isRaceWeek = week === cfg.weeks;
-  if (isRaceWeek) return `🏅 Race Day: ${cfg.dist} miles · Rest most of week · Race on Sunday`;
+  const runsPerWeek = fitness === 'beginner' ? 4 : fitness === 'intermediate' ? 5 : 6;
+  const isRaceWeek = week === totalWeeks;
 
-  const longRun = Math.min(raceType==='full'?22:14, Math.round(totalMiles*0.3));
-  const tempoMiles = week<=4?3:week<=8?5:4;
+  if (isRaceWeek) {
+    return `🏅 Race Day: ${cfg.dist} miles · Rest most of week · Race on Sunday`;
+  }
+
+  const longRun = Math.min(raceType === 'full' ? 22 : 14, Math.round(totalMiles * 0.3));
+  const tempoMiles = week <= 4 ? 3 : week <= 8 ? 5 : 4;
+  const easyTotal = totalMiles - longRun - tempoMiles;
   const easyCount = runsPerWeek - 2;
-  const easyMilesEach = Math.max(3, Math.round((totalMiles - longRun - tempoMiles) / easyCount));
+  const easyMilesEach = Math.max(3, Math.round(easyTotal / easyCount));
 
   const lines = [];
   lines.push(`🟢 Long run: ${longRun} mi @ easy pace`);
@@ -668,56 +740,66 @@ function buildRuns(totalMiles, week, paceSec, fitness, raceType) {
 function icsDate(date, hour) {
   const d = new Date(date);
   d.setHours(hour, 0, 0, 0);
-  return d.toISOString().replace(/[-:]/g,'').replace(/\.\d{3}/,'');
+  return d.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
 }
 
 function icsEvent(uid, summary, description, date, durationHours) {
   const start = icsDate(date, 7);
   const endDate = new Date(date);
   endDate.setHours(7 + durationHours, 0, 0, 0);
-  const end = endDate.toISOString().replace(/[-:]/g,'').replace(/\.\d{3}/,'');
-  return ['BEGIN:VEVENT',`UID:${uid}@stride-training`,`DTSTAMP:${icsDate(new Date(),0)}`,
-    `DTSTART:${start}`,`DTEND:${end}`,`SUMMARY:${summary}`,`DESCRIPTION:${description}`,'END:VEVENT'].join('\r\n');
+  const end = endDate.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
+  return [
+    'BEGIN:VEVENT',
+    `UID:${uid}@stride-training`,
+    `DTSTAMP:${icsDate(new Date(), 0)}`,
+    `DTSTART:${start}`,
+    `DTEND:${end}`,
+    `SUMMARY:${summary}`,
+    `DESCRIPTION:${description}`,
+    'END:VEVENT'
+  ].join('\r\n');
 }
 
 function downloadICS() {
   if (!_planData) return;
-  const { paceSec, fitness, startDateStr, raceDateVal, raceType } = _planData;
+  const { paceSec, fitness, startDateStr, raceDateVal, raceType, totalWeeks } = _planData;
   const cfg = RACE_CONFIG[raceType];
-  const runsPerWeek = fitness==='beginner'?4:fitness==='intermediate'?5:6;
-  const dayOffsets = { 4:[0,2,4,6], 5:[0,1,3,5,6], 6:[0,1,2,4,5,6] };
+  const runsPerWeek = fitness === 'beginner' ? 4 : fitness === 'intermediate' ? 5 : 6;
+  const dayOffsets = { 4: [0, 2, 4, 6], 5: [0, 1, 3, 5, 6], 6: [0, 1, 2, 4, 5, 6] };
   const offsets = dayOffsets[runsPerWeek];
-  const weeks = buildWeekSchedule(raceType, fitness);
+  const weeks = buildWeekSchedule(raceType, fitness, totalWeeks);
 
   const origin = new Date(startDateStr + 'T00:00:00');
   const dow = origin.getDay();
-  origin.setDate(origin.getDate() + (dow===0?1:dow===1?0:8-dow));
+  origin.setDate(origin.getDate() + (dow === 0 ? 1 : dow === 1 ? 0 : 8 - dow));
 
   const events = [];
+
   weeks.forEach(({ w, miles }) => {
     const weekStart = new Date(origin);
-    weekStart.setDate(origin.getDate() + (w-1)*7);
+    weekStart.setDate(origin.getDate() + (w - 1) * 7);
+    const isRaceWeek = w === totalWeeks;
 
-    if (w === cfg.weeks) {
+    if (isRaceWeek) {
       const raceDay = new Date(weekStart);
       raceDay.setDate(weekStart.getDate() + 6);
       events.push(icsEvent(`w${w}-race`, `🏅 Race Day — ${cfg.label}!`,
-        `${cfg.dist} miles. Target pace: ${fmtPace(paceSec)}/mile. Good luck!`,
-        raceDay, raceType==='full'?5:3));
+        `${cfg.dist} miles. You trained for this. Target pace: ${fmtPace(paceSec)}/mile. Good luck!`,
+        raceDay, raceType === 'full' ? 5 : 3));
       return;
     }
 
-    const longRun = Math.min(raceType==='full'?22:14, Math.round(miles*0.3));
-    const tempoMiles = w<=4?3:w<=8?5:4;
-    const easyMiles = Math.max(3, Math.round((miles-longRun-tempoMiles)/(runsPerWeek-2)));
+    const longRun = Math.min(raceType === 'full' ? 22 : 14, Math.round(miles * 0.3));
+    const tempoMiles = w <= 4 ? 3 : w <= 8 ? 5 : 4;
+    const easyMiles = Math.max(3, Math.round((miles - longRun - tempoMiles) / (runsPerWeek - 2)));
 
     const runTypes = [
-      { name:`🔵 Easy Run — ${easyMiles} mi`, desc:`Easy pace ${fmtPace(paceSec+90)}/mi.`, dur:Math.ceil(easyMiles*paceSec/3600)+1 },
-      { name:w>=3?`🟡 Tempo — ${tempoMiles} mi`:`🔵 Easy Run — ${easyMiles} mi`, desc:w>=3?`Threshold pace ${fmtPace(paceSec-20)}/mi.`:`Easy pace ${fmtPace(paceSec+90)}/mi.`, dur:1 },
-      runsPerWeek>=5?{ name:'🟣 Intervals — 5×800m', desc:`Interval pace ${fmtPace(paceSec-45)}/mi.`, dur:1 }:null,
-      { name:`🔵 Easy Run — ${easyMiles} mi`, desc:`Easy pace ${fmtPace(paceSec+90)}/mi.`, dur:Math.ceil(easyMiles*paceSec/3600)+1 },
-      runsPerWeek>=6?{ name:`🔵 Easy Run — ${easyMiles} mi`, desc:`Easy pace ${fmtPace(paceSec+90)}/mi.`, dur:Math.ceil(easyMiles*paceSec/3600)+1 }:null,
-      { name:`🟢 Long Run — ${longRun} mi`, desc:`Long run pace ${fmtPace(paceSec+60)}/mi. Hydrate well.`, dur:Math.ceil(longRun*(paceSec+60)/3600)+1 },
+      { name: `🔵 Easy Run — ${easyMiles} mi`, desc: `Easy pace ${fmtPace(paceSec + 90)}/mi. Keep it conversational.`, dur: Math.ceil(easyMiles * paceSec / 3600) + 1 },
+      { name: w >= 3 ? `🟡 Tempo — ${tempoMiles} mi` : `🔵 Easy Run — ${easyMiles} mi`, desc: w >= 3 ? `Threshold pace ${fmtPace(paceSec - 20)}/mi. Comfortably hard.` : `Easy pace ${fmtPace(paceSec + 90)}/mi.`, dur: 1 },
+      runsPerWeek >= 5 ? { name: '🟣 Intervals — 5×800m', desc: `Interval pace ${fmtPace(paceSec - 45)}/mi. Warm up 1 mi, 5×800m, cool down 1 mi.`, dur: 1 } : null,
+      { name: `🔵 Easy Run — ${easyMiles} mi`, desc: `Easy pace ${fmtPace(paceSec + 90)}/mi.`, dur: Math.ceil(easyMiles * paceSec / 3600) + 1 },
+      runsPerWeek >= 6 ? { name: `🔵 Easy Run — ${easyMiles} mi`, desc: `Easy pace ${fmtPace(paceSec + 90)}/mi.`, dur: Math.ceil(easyMiles * paceSec / 3600) + 1 } : null,
+      { name: `🟢 Long Run — ${longRun} mi`, desc: `Long run pace ${fmtPace(paceSec + 60)}/mi. Build aerobic base. Hydrate well.`, dur: Math.ceil(longRun * (paceSec + 60) / 3600) + 1 },
     ].filter(Boolean).slice(0, runsPerWeek);
 
     offsets.slice(0, runsPerWeek).forEach((dayOff, i) => {
@@ -728,15 +810,24 @@ function downloadICS() {
     });
   });
 
-  const ics = ['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Stride//Training Planner//EN',
-    'CALSCALE:GREGORIAN','METHOD:PUBLISH',`X-WR-CALNAME:Stride ${cfg.label} Training`,
-    `X-WR-CALDESC:Your ${cfg.weeks}-week ${cfg.label} training plan from Stride`,
-    ...events,'END:VCALENDAR'].join('\r\n');
+  const ics = [
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'PRODID:-//Stride//Training Planner//EN',
+    'CALSCALE:GREGORIAN',
+    'METHOD:PUBLISH',
+    `X-WR-CALNAME:Stride ${cfg.label} Training`,
+    `X-WR-CALDESC:Your ${totalWeeks}-week ${cfg.label} training plan from Stride`,
+    ...events,
+    'END:VCALENDAR'
+  ].join('\r\n');
 
-  const blob = new Blob([ics], { type:'text/calendar;charset=utf-8' });
+  const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
-  a.href = url; a.download = `stride-${raceType}-plan.ics`; a.click();
+  a.href = url;
+  a.download = `stride-${raceType}-plan.ics`;
+  a.click();
   URL.revokeObjectURL(url);
 }
 </script>
