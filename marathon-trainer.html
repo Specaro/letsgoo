@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Stride – Marathon Training Planner</title>
+  <title>Stride – Training Planner</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -30,7 +30,6 @@
       min-height: 100vh;
     }
 
-    /* ── Header ── */
     header {
       background: linear-gradient(135deg, #0f1117 0%, #1a1d27 100%);
       border-bottom: 1px solid var(--border);
@@ -44,10 +43,8 @@
     header h1 span { color: var(--orange); }
     header p { color: var(--muted); font-size: 0.875rem; margin-top: 0.2rem; }
 
-    /* ── Layout ── */
     .container { max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem; }
 
-    /* ── Form Card ── */
     .form-card {
       background: var(--card);
       border: 1px solid var(--border);
@@ -56,6 +53,29 @@
       margin-bottom: 2rem;
     }
     .form-card h2 { font-size: 1.1rem; font-weight: 600; margin-bottom: 1.5rem; color: var(--orange); text-transform: uppercase; letter-spacing: 0.05em; }
+
+    .race-toggle {
+      display: flex;
+      gap: 0;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      width: 100%;
+    }
+    .race-toggle-btn {
+      flex: 1;
+      background: var(--card2);
+      border: none;
+      padding: 0.65rem 0.5rem;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+      white-space: nowrap;
+    }
+    .race-toggle-btn + .race-toggle-btn { border-left: 1px solid var(--border); }
+    .race-toggle-btn.active { background: var(--orange); color: #fff; }
 
     .form-grid {
       display: grid;
@@ -88,9 +108,17 @@
     }
     .field select option { background: var(--card2); }
 
-    .pace-row { display: flex; gap: 0.5rem; }
-    .pace-row input { text-align: center; }
-    .pace-sep { display: flex; align-items: center; padding-top: 0.1rem; color: var(--muted); font-size: 1.2rem; font-weight: 300; }
+    .split-row { display: flex; gap: 0.5rem; align-items: center; }
+    .split-row input { text-align: center; }
+    .split-sep { color: var(--muted); font-size: 0.85rem; white-space: nowrap; flex-shrink: 0; padding-top: 0.1rem; }
+
+    .start-chip {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-top: 0.4rem;
+      min-height: 1.1em;
+    }
+    .start-chip span { color: var(--orange); font-weight: 600; }
 
     .btn {
       margin-top: 1.5rem;
@@ -110,7 +138,6 @@
 
     .error-msg { color: #f87171; font-size: 0.85rem; margin-top: 1rem; display: none; }
 
-    /* ── Results ── */
     #results { display: none; }
 
     .results-header {
@@ -118,6 +145,7 @@
       align-items: center;
       gap: 0.75rem;
       margin-bottom: 1.5rem;
+      flex-wrap: wrap;
     }
     .results-header h2 { font-size: 1.3rem; font-weight: 700; }
     .badge {
@@ -129,7 +157,6 @@
       font-weight: 700;
     }
 
-    /* ── Tabs ── */
     .tabs { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
     .tab {
       background: var(--card);
@@ -148,7 +175,6 @@
     .tab-panel { display: none; }
     .tab-panel.active { display: block; }
 
-    /* ── Stats Row ── */
     .stats-row {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
@@ -166,7 +192,6 @@
     .stat-card .value { font-size: 1.6rem; font-weight: 700; color: var(--orange); }
     .stat-card .unit { font-size: 0.75rem; color: var(--muted); margin-top: 0.2rem; }
 
-    /* ── Pace Table ── */
     .section-title {
       font-size: 0.8rem;
       font-weight: 700;
@@ -196,38 +221,6 @@
     .pace-desc { flex: 2; font-size: 0.8rem; color: var(--muted); }
     .pace-val { font-size: 1rem; font-weight: 700; white-space: nowrap; }
 
-    /* ── HR Zones ── */
-    .hr-zone {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      overflow: hidden;
-      margin-bottom: 0.75rem;
-    }
-    .hr-zone-header {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      padding: 1rem 1.25rem;
-    }
-    .hr-zone-number {
-      width: 32px; height: 32px;
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-weight: 700; font-size: 0.875rem;
-      flex-shrink: 0;
-    }
-    .hr-zone-info { flex: 1; }
-    .hr-zone-info .zone-name { font-weight: 700; font-size: 0.95rem; }
-    .hr-zone-info .zone-desc { font-size: 0.8rem; color: var(--muted); margin-top: 0.1rem; }
-    .hr-zone-range { text-align: right; }
-    .hr-zone-range .bpm { font-size: 1.1rem; font-weight: 700; }
-    .hr-zone-range .pct { font-size: 0.75rem; color: var(--muted); }
-    .hr-bar-wrap { padding: 0 1.25rem 1rem; }
-    .hr-bar-bg { background: var(--card2); border-radius: 4px; height: 6px; overflow: hidden; }
-    .hr-bar-fill { height: 100%; border-radius: 4px; transition: width 0.5s ease; }
-
-    /* ── Training Plan ── */
     .plan-info {
       background: var(--card);
       border: 1px solid var(--border);
@@ -283,7 +276,6 @@
     .week-bar-bg { background: var(--card2); border-radius: 4px; height: 4px; }
     .week-bar-fill { height: 100%; border-radius: 4px; background: var(--orange); transition: width 0.5s; }
 
-    /* ── Calendar Button ── */
     .cal-bar {
       background: var(--card);
       border: 1px solid var(--border);
@@ -315,9 +307,7 @@
     }
     .btn-cal:hover { opacity: 0.9; }
     .btn-cal:active { transform: scale(0.97); }
-    .btn-cal img { width: 18px; height: 18px; }
 
-    /* ── Responsive ── */
     @media (max-width: 600px) {
       header { padding: 1.2rem 1rem; }
       .container { padding: 1.25rem 1rem; }
@@ -332,16 +322,24 @@
   <div class="logo">🏃</div>
   <div>
     <h1><span>Stride</span></h1>
-    <p>Personalized marathon training plans, paces, and heart rate zones</p>
+    <p>Personalized training plans and paces for half marathons &amp; marathons</p>
   </div>
 </header>
 
 <div class="container">
 
-  <!-- ── INPUT FORM ── -->
   <div class="form-card">
     <h2>Your Profile</h2>
     <div class="form-grid">
+
+      <div class="field">
+        <label>Race Type</label>
+        <div class="race-toggle">
+          <button class="race-toggle-btn active" id="btn-half" onclick="setRaceType('half')">Half Marathon</button>
+          <button class="race-toggle-btn" id="btn-full" onclick="setRaceType('full')">Marathon</button>
+        </div>
+      </div>
+
       <div class="field">
         <label>Gender</label>
         <select id="gender">
@@ -349,91 +347,107 @@
           <option value="female">Female</option>
         </select>
       </div>
+
       <div class="field">
-        <label>Age</label>
-        <input type="number" id="age" placeholder="e.g. 30" min="10" max="100" />
+        <label>Height</label>
+        <div class="split-row">
+          <input type="number" id="height-ft" placeholder="5" min="3" max="7" style="width:70px" />
+          <div class="split-sep">ft</div>
+          <input type="number" id="height-in" placeholder="10" min="0" max="11" style="width:70px" />
+          <div class="split-sep">in</div>
+        </div>
       </div>
-      <div class="field">
-        <label>Height (inches)</label>
-        <input type="number" id="height" placeholder="e.g. 70" min="48" max="96" />
-      </div>
+
       <div class="field">
         <label>Weight (lbs)</label>
         <input type="number" id="weight" placeholder="e.g. 160" min="80" max="400" />
       </div>
+
       <div class="field">
         <label>Target Pace (min:sec / mile)</label>
-        <div class="pace-row">
-          <input type="number" id="pace-min" placeholder="9" min="4" max="20" style="width:80px" />
-          <div class="pace-sep">:</div>
-          <input type="number" id="pace-sec" placeholder="00" min="0" max="59" style="width:80px" />
+        <div class="split-row">
+          <input type="number" id="pace-min" placeholder="9" min="4" max="20" style="width:70px" />
+          <div class="split-sep">:</div>
+          <input type="number" id="pace-sec" placeholder="00" min="0" max="59" style="width:70px" />
         </div>
       </div>
+
       <div class="field">
         <label>Fitness Level</label>
         <select id="fitness">
-          <option value="beginner">Beginner (first marathon)</option>
-          <option value="intermediate">Intermediate (1–3 marathons)</option>
-          <option value="advanced">Advanced (4+ marathons)</option>
+          <option value="beginner">Beginner</option>
+          <option value="intermediate">Intermediate</option>
+          <option value="advanced">Advanced</option>
         </select>
       </div>
+
       <div class="field">
-        <label>Training Start Date</label>
-        <input type="date" id="start-date" />
+        <label>Race Date</label>
+        <input type="date" id="race-date" onchange="updateStartChip()" />
+        <div class="start-chip" id="start-chip"></div>
       </div>
+
     </div>
     <button class="btn" onclick="generate()">Generate My Plan →</button>
-    <script>document.getElementById('start-date').value = new Date().toISOString().split('T')[0];</script>
     <div class="error-msg" id="error-msg"></div>
   </div>
 
-  <!-- ── RESULTS ── -->
   <div id="results">
     <div class="results-header">
       <h2>Your Training Plan</h2>
       <div class="badge" id="result-badge"></div>
+      <div class="badge" id="result-race-badge" style="background:var(--blue)"></div>
     </div>
 
     <div class="tabs">
       <div class="tab active" onclick="switchTab('pace')">Pace Calculator</div>
-      <div class="tab" onclick="switchTab('plan')">18-Week Schedule</div>
-      <div class="tab" onclick="switchTab('hr')">Heart Rate Zones</div>
+      <div class="tab" onclick="switchTab('plan')">Training Schedule</div>
     </div>
 
-    <!-- ── PACE PANEL ── -->
     <div class="tab-panel active" id="tab-pace">
       <div class="stats-row" id="finish-stats"></div>
       <div class="section-title">Training Paces</div>
       <div class="pace-table" id="pace-table"></div>
     </div>
 
-    <!-- ── PLAN PANEL ── -->
     <div class="tab-panel" id="tab-plan">
       <div class="cal-bar" id="cal-bar" style="display:none">
         <div class="cal-bar-text">
-          <div class="cal-title">Add all runs to Google Calendar</div>
+          <div class="cal-title">Export to Google Calendar</div>
           <div class="cal-sub" id="cal-sub"></div>
         </div>
         <button class="btn-cal" onclick="downloadICS()">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-          Download .ics for Google Calendar
+          Download .ics
         </button>
       </div>
       <div class="plan-info" id="plan-info"></div>
       <div class="plan-grid" id="plan-grid"></div>
-    </div>
-
-    <!-- ── HR PANEL ── -->
-    <div class="tab-panel" id="tab-hr">
-      <div class="stats-row" id="hr-stats"></div>
-      <div class="section-title">Your 5 Training Zones</div>
-      <div id="hr-zones"></div>
     </div>
   </div>
 
 </div>
 
 <script>
+let _raceType = 'half';
+let _planData = null;
+
+const RACE_CONFIG = {
+  half: { dist: 13.1094, weeks: 12, label: 'Half Marathon',
+          bases: { beginner: 15, intermediate: 20, advanced: 28 },
+          peaks: { beginner: 30, intermediate: 40, advanced: 50 } },
+  full: { dist: 26.2188, weeks: 18, label: 'Marathon',
+          bases: { beginner: 18, intermediate: 25, advanced: 32 },
+          peaks: { beginner: 40, intermediate: 50, advanced: 60 } },
+};
+
+function setRaceType(type) {
+  _raceType = type;
+  document.getElementById('btn-half').classList.toggle('active', type === 'half');
+  document.getElementById('btn-full').classList.toggle('active', type === 'full');
+  updateStartChip();
+}
+
 function fmtPace(totalSec) {
   const m = Math.floor(totalSec / 60);
   const s = Math.round(totalSec % 60);
@@ -448,58 +462,81 @@ function fmtTime(totalMin) {
 
 function switchTab(name) {
   document.querySelectorAll('.tab').forEach((t, i) => {
-    t.classList.toggle('active', ['pace', 'plan', 'hr'][i] === name);
+    t.classList.toggle('active', ['pace', 'plan'][i] === name);
   });
   document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
   document.getElementById(`tab-${name}`).classList.add('active');
 }
 
-let _planData = null;
+function updateStartChip() {
+  const raceDateVal = document.getElementById('race-date').value;
+  const chip = document.getElementById('start-chip');
+  if (!raceDateVal) { chip.innerHTML = ''; return; }
+  const cfg = RACE_CONFIG[_raceType];
+  const raceDate = new Date(raceDateVal + 'T00:00:00');
+  const startDate = new Date(raceDate);
+  startDate.setDate(raceDate.getDate() - cfg.weeks * 7);
+  chip.innerHTML = `Training starts <span>${startDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>`;
+}
 
 function generate() {
-  const gender    = document.getElementById('gender').value;
-  const age       = parseInt(document.getElementById('age').value);
-  const height    = parseFloat(document.getElementById('height').value);
-  const weight    = parseFloat(document.getElementById('weight').value);
-  const pMin      = parseInt(document.getElementById('pace-min').value);
-  const pSec      = parseInt(document.getElementById('pace-sec').value) || 0;
-  const fitness   = document.getElementById('fitness').value;
-  const startDate = document.getElementById('start-date').value;
+  const gender      = document.getElementById('gender').value;
+  const heightFt    = parseInt(document.getElementById('height-ft').value) || 0;
+  const heightIn    = parseInt(document.getElementById('height-in').value) || 0;
+  const weight      = parseFloat(document.getElementById('weight').value);
+  const pMin        = parseInt(document.getElementById('pace-min').value);
+  const pSec        = parseInt(document.getElementById('pace-sec').value) || 0;
+  const fitness     = document.getElementById('fitness').value;
+  const raceDateVal = document.getElementById('race-date').value;
 
   const errEl = document.getElementById('error-msg');
   errEl.style.display = 'none';
 
-  if (!age || !height || !weight || !pMin) {
+  if (!heightFt || !weight || !pMin || !raceDateVal) {
     errEl.textContent = 'Please fill in all fields.';
-    errEl.style.display = 'block';
-    return;
+    errEl.style.display = 'block'; return;
   }
-  if (age < 10 || age > 100) { errEl.textContent = 'Age must be between 10 and 100.'; errEl.style.display = 'block'; return; }
-  if (pMin < 4 || pMin > 20)  { errEl.textContent = 'Target pace must be between 4:00 and 20:00 per mile.'; errEl.style.display = 'block'; return; }
+  const heightInches = heightFt * 12 + heightIn;
+  if (heightInches < 48 || heightInches > 96) {
+    errEl.textContent = 'Height must be between 4 ft 0 in and 8 ft 0 in.';
+    errEl.style.display = 'block'; return;
+  }
+  if (pMin < 4 || pMin > 20) {
+    errEl.textContent = 'Target pace must be between 4:00 and 20:00 per mile.';
+    errEl.style.display = 'block'; return;
+  }
 
   const paceSec = pMin * 60 + pSec;
-  _planData = { paceSec, fitness, startDate };
+  const cfg = RACE_CONFIG[_raceType];
+  const raceDate = new Date(raceDateVal + 'T00:00:00');
+  const startDate = new Date(raceDate);
+  startDate.setDate(raceDate.getDate() - cfg.weeks * 7);
+  const startDateStr = startDate.toISOString().split('T')[0];
+
+  _planData = { paceSec, fitness, startDateStr, raceDateVal, raceType: _raceType };
 
   document.getElementById('result-badge').textContent = fitness.charAt(0).toUpperCase() + fitness.slice(1);
-  renderPace(paceSec, weight, height, gender);
-  renderPlan(paceSec, fitness, startDate);
-  renderHR(age, gender);
+  document.getElementById('result-race-badge').textContent = cfg.label;
+
+  renderPace(paceSec, weight, heightInches, gender);
+  renderPlan(paceSec, fitness, startDateStr, raceDateVal);
 
   document.getElementById('results').style.display = 'block';
   document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-function renderPace(paceSec, weight, height, gender) {
-  const marathonMin = (paceSec / 60) * 26.2188;
-  const bmi = (weight / (height * height)) * 703;
-  const speedMpm = 1609.34 / (paceSec);
+function renderPace(paceSec, weight, heightInches, gender) {
+  const cfg = RACE_CONFIG[_raceType];
+  const finishMin = (paceSec / 60) * cfg.dist;
+  const bmi = (weight / (heightInches * heightInches)) * 703;
+  const speedMpm = 1609.34 / paceSec;
   const vo2max = Math.max(20, Math.round(-4.6 + 0.182258 * speedMpm + 0.000104 * speedMpm * speedMpm));
 
   document.getElementById('finish-stats').innerHTML = `
     <div class="stat-card">
       <div class="label">Finish Time</div>
-      <div class="value">${fmtTime(marathonMin)}</div>
-      <div class="unit">marathon (26.2 mi)</div>
+      <div class="value">${fmtTime(finishMin)}</div>
+      <div class="unit">${cfg.label} (${cfg.dist} mi)</div>
     </div>
     <div class="stat-card">
       <div class="label">Target Pace</div>
@@ -519,12 +556,12 @@ function renderPace(paceSec, weight, height, gender) {
   `;
 
   const paces = [
-    { name: 'Easy / Recovery', color: '#2ecc71', desc: 'Conversational — most of your runs', offset: 90 },
-    { name: 'Long Run',        color: '#3b82f6', desc: 'Slightly faster than easy, weekly long run', offset: 60 },
-    { name: 'Marathon Race',   color: '#e8540a', desc: 'Your target race day pace', offset: 0 },
-    { name: 'Tempo / Threshold', color: '#f59e0b', desc: 'Comfortably hard — 1 hr race pace', offset: -20 },
-    { name: 'Interval / VO₂max', color: '#a855f7', desc: 'Hard effort — short repeats', offset: -45 },
-    { name: 'Repetition', color: '#ef4444', desc: 'Very fast — speed work', offset: -75 },
+    { name: 'Easy / Recovery',    color: '#2ecc71', desc: 'Conversational — most of your runs',         offset:  90 },
+    { name: 'Long Run',           color: '#3b82f6', desc: 'Slightly easier than easy, weekly long run', offset:  60 },
+    { name: `${cfg.label} Race`,  color: '#e8540a', desc: 'Your target race day pace',                  offset:   0 },
+    { name: 'Tempo / Threshold',  color: '#f59e0b', desc: 'Comfortably hard — 1 hr race pace',          offset: -20 },
+    { name: 'Interval / VO₂max', color: '#a855f7', desc: 'Hard effort — short repeats',                offset: -45 },
+    { name: 'Repetition',         color: '#ef4444', desc: 'Very fast — speed work',                     offset: -75 },
   ];
 
   document.getElementById('pace-table').innerHTML = paces.map(p => `
@@ -537,66 +574,63 @@ function renderPace(paceSec, weight, height, gender) {
   `).join('');
 }
 
-function renderPlan(paceSec, fitness, startDate) {
-  const bases = { beginner: 18, intermediate: 25, advanced: 32 };
-  const peaks  = { beginner: 40, intermediate: 50, advanced: 60 };
-  const base = bases[fitness];
-  const peak = peaks[fitness];
-
+function buildWeekSchedule(raceType, fitness) {
+  const cfg = RACE_CONFIG[raceType];
+  const base = cfg.bases[fitness];
+  const peak = cfg.peaks[fitness];
   const weeks = [];
-  for (let w = 1; w <= 18; w++) {
-    let miles, phase, badge;
-    if (w <= 3) {
-      miles = base + (w - 1) * 2;
-      phase = 'Build'; badge = 'badge-build';
-    } else if (w <= 6) {
-      miles = base + 6 + (w - 4) * 3;
-      phase = 'Build'; badge = 'badge-build';
-    } else if (w <= 9) {
-      if (w === 9) { miles = base + 6; phase = 'Recovery'; badge = 'badge-build'; }
-      else { miles = base + 9 + (w - 7) * 3; phase = 'Build'; badge = 'badge-build'; }
-    } else if (w <= 13) {
-      if (w === 13) { miles = base + 10; phase = 'Recovery'; badge = 'badge-build'; }
-      else { miles = base + 12 + (w - 10) * 3; phase = 'Build'; badge = 'badge-build'; }
-    } else if (w === 14) {
-      miles = peak; phase = 'Peak'; badge = 'badge-peak';
-    } else if (w === 15) {
-      miles = Math.round(peak * 0.8); phase = 'Peak'; badge = 'badge-peak';
-    } else if (w === 16) {
-      miles = Math.round(peak * 0.65); phase = 'Taper'; badge = 'badge-taper';
-    } else if (w === 17) {
-      miles = Math.round(peak * 0.45); phase = 'Taper'; badge = 'badge-taper';
-    } else {
-      miles = 26; phase = 'Race Week!'; badge = 'badge-race';
+
+  if (raceType === 'full') {
+    for (let w = 1; w <= 18; w++) {
+      let miles, phase, badge;
+      if (w <= 3)        { miles = base + (w-1)*2; phase='Build'; badge='badge-build'; }
+      else if (w <= 6)   { miles = base+6+(w-4)*3; phase='Build'; badge='badge-build'; }
+      else if (w <= 9)   { miles = w===9 ? base+6 : base+9+(w-7)*3; phase=w===9?'Recovery':'Build'; badge='badge-build'; }
+      else if (w <= 13)  { miles = w===13 ? base+10 : base+12+(w-10)*3; phase=w===13?'Recovery':'Build'; badge='badge-build'; }
+      else if (w === 14) { miles=peak; phase='Peak'; badge='badge-peak'; }
+      else if (w === 15) { miles=Math.round(peak*0.8); phase='Peak'; badge='badge-peak'; }
+      else if (w === 16) { miles=Math.round(peak*0.65); phase='Taper'; badge='badge-taper'; }
+      else if (w === 17) { miles=Math.round(peak*0.45); phase='Taper'; badge='badge-taper'; }
+      else               { miles=26; phase='Race Week!'; badge='badge-race'; }
+      weeks.push({ w, miles: Math.min(miles, peak), phase, badge });
     }
-    miles = Math.min(miles, peak);
-    const runs = buildRuns(miles, w, paceSec, fitness);
-    weeks.push({ w, miles, phase, badge, runs });
-  }
-
-  const maxMiles = Math.max(...weeks.map(x => x.miles));
-
-  const calBar = document.getElementById('cal-bar');
-  const calSub = document.getElementById('cal-sub');
-  if (startDate) {
-    const sd = new Date(startDate + 'T00:00:00');
-    const raceDate = new Date(sd);
-    raceDate.setDate(sd.getDate() + 17 * 7);
-    calSub.textContent = `${weeks.length * 5}+ events from ${sd.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})} → Race day ${raceDate.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}`;
   } else {
-    calSub.textContent = 'Add a start date above to enable calendar export.';
+    for (let w = 1; w <= 12; w++) {
+      let miles, phase, badge;
+      if (w <= 3)       { miles=base+(w-1)*2; phase='Build'; badge='badge-build'; }
+      else if (w <= 6)  { miles=base+6+(w-4)*2; phase='Build'; badge='badge-build'; }
+      else if (w <= 8)  { miles=w===8 ? base+6 : base+10+(w-7)*2; phase=w===8?'Recovery':'Build'; badge='badge-build'; }
+      else if (w === 9) { miles=peak; phase='Peak'; badge='badge-peak'; }
+      else if (w === 10){ miles=Math.round(peak*0.75); phase='Taper'; badge='badge-taper'; }
+      else if (w === 11){ miles=Math.round(peak*0.5); phase='Taper'; badge='badge-taper'; }
+      else              { miles=14; phase='Race Week!'; badge='badge-race'; }
+      weeks.push({ w, miles: Math.min(miles, peak), phase, badge });
+    }
   }
-  calBar.style.display = 'flex';
+  return weeks;
+}
+
+function renderPlan(paceSec, fitness, startDateStr, raceDateVal) {
+  const cfg = RACE_CONFIG[_raceType];
+  const weeks = buildWeekSchedule(_raceType, fitness);
+  const maxMiles = Math.max(...weeks.map(x => x.miles));
+  weeks.forEach(wk => { wk.runs = buildRuns(wk.miles, wk.w, paceSec, fitness, _raceType); });
+
+  const sd = new Date(startDateStr + 'T00:00:00');
+  const rd = new Date(raceDateVal + 'T00:00:00');
+  document.getElementById('cal-sub').textContent =
+    `${weeks.length * 4}+ events · ${sd.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})} → Race ${rd.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}`;
+  document.getElementById('cal-bar').style.display = 'flex';
 
   document.getElementById('plan-info').innerHTML = `
-    <div class="plan-info-item"><div class="pi-label">Total Weeks</div><div class="pi-val">18 Weeks</div></div>
-    <div class="plan-info-item"><div class="pi-label">Peak Mileage</div><div class="pi-val">${peak} miles/week</div></div>
-    <div class="plan-info-item"><div class="pi-label">Runs per Week</div><div class="pi-val">${fitness === 'beginner' ? 4 : fitness === 'intermediate' ? 5 : 6}</div></div>
-    <div class="plan-info-item"><div class="pi-label">Plan Level</div><div class="pi-val">${fitness.charAt(0).toUpperCase() + fitness.slice(1)}</div></div>
+    <div class="plan-info-item"><div class="pi-label">Race</div><div class="pi-val">${cfg.label}</div></div>
+    <div class="plan-info-item"><div class="pi-label">Total Weeks</div><div class="pi-val">${cfg.weeks} Weeks</div></div>
+    <div class="plan-info-item"><div class="pi-label">Peak Mileage</div><div class="pi-val">${cfg.peaks[fitness]} mi/week</div></div>
+    <div class="plan-info-item"><div class="pi-label">Runs/Week</div><div class="pi-val">${fitness==='beginner'?4:fitness==='intermediate'?5:6}</div></div>
   `;
 
   document.getElementById('plan-grid').innerHTML = weeks.map(({ w, miles, phase, badge, runs }) => `
-    <div class="week-card ${phase === 'Peak' ? 'peak' : phase === 'Taper' ? 'taper' : phase === 'Race Week!' ? 'race' : ''}">
+    <div class="week-card ${phase==='Peak'?'peak':phase==='Taper'?'taper':phase==='Race Week!'?'race':''}">
       <div class="week-header">
         <div class="week-num">Week ${w}</div>
         <div class="week-badge ${badge}">${phase}</div>
@@ -605,116 +639,85 @@ function renderPlan(paceSec, fitness, startDate) {
       <div class="week-runs">${runs}</div>
       <div class="week-bar-wrap">
         <div class="week-bar-bg">
-          <div class="week-bar-fill" style="width:${(miles / maxMiles * 100).toFixed(1)}%"></div>
+          <div class="week-bar-fill" style="width:${(miles/maxMiles*100).toFixed(1)}%"></div>
         </div>
       </div>
     </div>
   `).join('');
 }
 
-function buildRuns(totalMiles, week, paceSec, fitness) {
-  const runsPerWeek = fitness === 'beginner' ? 4 : fitness === 'intermediate' ? 5 : 6;
-  const longRun = Math.min(22, Math.round(totalMiles * 0.3));
-  const tempoMiles = week <= 6 ? 4 : week <= 12 ? 6 : 5;
-  const easyTotal = totalMiles - longRun - tempoMiles;
-  const easyCount = runsPerWeek - 2;
-  const easyMilesEach = Math.round(easyTotal / easyCount);
+function buildRuns(totalMiles, week, paceSec, fitness, raceType) {
+  const cfg = RACE_CONFIG[raceType];
+  const runsPerWeek = fitness==='beginner'?4:fitness==='intermediate'?5:6;
+  const isRaceWeek = week === cfg.weeks;
+  if (isRaceWeek) return `🏅 Race Day: ${cfg.dist} miles · Rest most of week · Race on Sunday`;
 
-  if (week === 18) return '🏅 Race Day: 26.2 miles · Rest Mon–Sat · Race Sunday';
+  const longRun = Math.min(raceType==='full'?22:14, Math.round(totalMiles*0.3));
+  const tempoMiles = week<=4?3:week<=8?5:4;
+  const easyCount = runsPerWeek - 2;
+  const easyMilesEach = Math.max(3, Math.round((totalMiles - longRun - tempoMiles) / easyCount));
 
   const lines = [];
   lines.push(`🟢 Long run: ${longRun} mi @ easy pace`);
-  if (week >= 4) lines.push(`🟡 Tempo: ${tempoMiles} mi @ threshold`);
+  if (week >= 3) lines.push(`🟡 Tempo: ${tempoMiles} mi @ threshold`);
   if (runsPerWeek >= 5) lines.push(`🟣 Intervals: 5×800m repeats`);
-  for (let i = 0; i < easyCount; i++) {
-    lines.push(`🔵 Easy run: ${Math.max(3, easyMilesEach)} mi`);
-  }
+  for (let i = 0; i < easyCount; i++) lines.push(`🔵 Easy run: ${easyMilesEach} mi`);
   return lines.slice(0, runsPerWeek).join('<br>');
 }
 
 function icsDate(date, hour) {
   const d = new Date(date);
   d.setHours(hour, 0, 0, 0);
-  return d.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
+  return d.toISOString().replace(/[-:]/g,'').replace(/\.\d{3}/,'');
 }
 
 function icsEvent(uid, summary, description, date, durationHours) {
   const start = icsDate(date, 7);
   const endDate = new Date(date);
   endDate.setHours(7 + durationHours, 0, 0, 0);
-  const end = endDate.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
-  return [
-    'BEGIN:VEVENT',
-    `UID:${uid}@stride-training`,
-    `DTSTAMP:${icsDate(new Date(), 0)}`,
-    `DTSTART:${start}`,
-    `DTEND:${end}`,
-    `SUMMARY:${summary}`,
-    `DESCRIPTION:${description}`,
-    'END:VEVENT'
-  ].join('\r\n');
+  const end = endDate.toISOString().replace(/[-:]/g,'').replace(/\.\d{3}/,'');
+  return ['BEGIN:VEVENT',`UID:${uid}@stride-training`,`DTSTAMP:${icsDate(new Date(),0)}`,
+    `DTSTART:${start}`,`DTEND:${end}`,`SUMMARY:${summary}`,`DESCRIPTION:${description}`,'END:VEVENT'].join('\r\n');
 }
 
 function downloadICS() {
   if (!_planData) return;
-  const { paceSec, fitness, startDate } = _planData;
-
-  if (!startDate) {
-    alert('Please enter a Training Start Date in the form above to export to calendar.');
-    return;
-  }
-
-  const bases = { beginner: 18, intermediate: 25, advanced: 32 };
-  const peaks  = { beginner: 40, intermediate: 50, advanced: 60 };
-  const base = bases[fitness];
-  const peak = peaks[fitness];
-  const runsPerWeek = fitness === 'beginner' ? 4 : fitness === 'intermediate' ? 5 : 6;
-
-  const dayOffsets = { 4: [0, 2, 4, 6], 5: [0, 1, 3, 5, 6], 6: [0, 1, 2, 4, 5, 6] };
+  const { paceSec, fitness, startDateStr, raceDateVal, raceType } = _planData;
+  const cfg = RACE_CONFIG[raceType];
+  const runsPerWeek = fitness==='beginner'?4:fitness==='intermediate'?5:6;
+  const dayOffsets = { 4:[0,2,4,6], 5:[0,1,3,5,6], 6:[0,1,2,4,5,6] };
   const offsets = dayOffsets[runsPerWeek];
+  const weeks = buildWeekSchedule(raceType, fitness);
+
+  const origin = new Date(startDateStr + 'T00:00:00');
+  const dow = origin.getDay();
+  origin.setDate(origin.getDate() + (dow===0?1:dow===1?0:8-dow));
 
   const events = [];
-  const origin = new Date(startDate + 'T00:00:00');
-  const dow = origin.getDay();
-  const toMon = dow === 0 ? 1 : dow === 1 ? 0 : 8 - dow;
-  origin.setDate(origin.getDate() + toMon);
-
-  for (let w = 1; w <= 18; w++) {
-    let miles;
-    if (w <= 3)        miles = base + (w - 1) * 2;
-    else if (w <= 6)   miles = base + 6 + (w - 4) * 3;
-    else if (w <= 9)   miles = w === 9 ? base + 6 : base + 9 + (w - 7) * 3;
-    else if (w <= 13)  miles = w === 13 ? base + 10 : base + 12 + (w - 10) * 3;
-    else if (w === 14) miles = peak;
-    else if (w === 15) miles = Math.round(peak * 0.8);
-    else if (w === 16) miles = Math.round(peak * 0.65);
-    else if (w === 17) miles = Math.round(peak * 0.45);
-    else miles = 26;
-    miles = Math.min(miles, peak);
-
+  weeks.forEach(({ w, miles }) => {
     const weekStart = new Date(origin);
-    weekStart.setDate(origin.getDate() + (w - 1) * 7);
+    weekStart.setDate(origin.getDate() + (w-1)*7);
 
-    if (w === 18) {
+    if (w === cfg.weeks) {
       const raceDay = new Date(weekStart);
       raceDay.setDate(weekStart.getDate() + 6);
-      events.push(icsEvent('w18-race', '🏅 Race Day — Marathon!',
-        `26.2 miles. You trained for this. Run your pace of ${fmtPace(paceSec)}/mile. Good luck!`,
-        raceDay, 5));
-      continue;
+      events.push(icsEvent(`w${w}-race`, `🏅 Race Day — ${cfg.label}!`,
+        `${cfg.dist} miles. Target pace: ${fmtPace(paceSec)}/mile. Good luck!`,
+        raceDay, raceType==='full'?5:3));
+      return;
     }
 
-    const longRun = Math.min(22, Math.round(miles * 0.3));
-    const tempoMiles = w <= 6 ? 4 : w <= 12 ? 6 : 5;
-    const easyMiles = Math.max(3, Math.round((miles - longRun - tempoMiles) / (runsPerWeek - 2)));
+    const longRun = Math.min(raceType==='full'?22:14, Math.round(miles*0.3));
+    const tempoMiles = w<=4?3:w<=8?5:4;
+    const easyMiles = Math.max(3, Math.round((miles-longRun-tempoMiles)/(runsPerWeek-2)));
 
     const runTypes = [
-      { name: `🔵 Easy Run — ${easyMiles} mi`, desc: `Easy/recovery run at ${fmtPace(paceSec + 90)}/mile. Keep it conversational.`, dur: Math.ceil(easyMiles * paceSec / 3600) + 1 },
-      { name: w >= 4 ? `🟡 Tempo Run — ${tempoMiles} mi` : `🔵 Easy Run — ${easyMiles} mi`, desc: w >= 4 ? `Threshold run at ${fmtPace(paceSec - 20)}/mile. Comfortably hard effort.` : `Easy run at ${fmtPace(paceSec + 90)}/mile.`, dur: 1 },
-      runsPerWeek >= 5 ? { name: '🟣 Intervals — 5×800m', desc: `Speed work at ${fmtPace(paceSec - 45)}/mile pace. Warm up 1 mi, 5 repeats of 800m, cool down 1 mi.`, dur: 1 } : null,
-      { name: `🔵 Easy Run — ${easyMiles} mi`, desc: `Easy run at ${fmtPace(paceSec + 90)}/mile.`, dur: Math.ceil(easyMiles * paceSec / 3600) + 1 },
-      runsPerWeek >= 6 ? { name: `🔵 Easy Run — ${easyMiles} mi`, desc: `Easy run at ${fmtPace(paceSec + 90)}/mile.`, dur: Math.ceil(easyMiles * paceSec / 3600) + 1 } : null,
-      { name: `🟢 Long Run — ${longRun} mi`, desc: `Long run at ${fmtPace(paceSec + 60)}/mile. Build your aerobic base. Hydrate well.`, dur: Math.ceil(longRun * (paceSec + 60) / 3600) + 1 },
+      { name:`🔵 Easy Run — ${easyMiles} mi`, desc:`Easy pace ${fmtPace(paceSec+90)}/mi.`, dur:Math.ceil(easyMiles*paceSec/3600)+1 },
+      { name:w>=3?`🟡 Tempo — ${tempoMiles} mi`:`🔵 Easy Run — ${easyMiles} mi`, desc:w>=3?`Threshold pace ${fmtPace(paceSec-20)}/mi.`:`Easy pace ${fmtPace(paceSec+90)}/mi.`, dur:1 },
+      runsPerWeek>=5?{ name:'🟣 Intervals — 5×800m', desc:`Interval pace ${fmtPace(paceSec-45)}/mi.`, dur:1 }:null,
+      { name:`🔵 Easy Run — ${easyMiles} mi`, desc:`Easy pace ${fmtPace(paceSec+90)}/mi.`, dur:Math.ceil(easyMiles*paceSec/3600)+1 },
+      runsPerWeek>=6?{ name:`🔵 Easy Run — ${easyMiles} mi`, desc:`Easy pace ${fmtPace(paceSec+90)}/mi.`, dur:Math.ceil(easyMiles*paceSec/3600)+1 }:null,
+      { name:`🟢 Long Run — ${longRun} mi`, desc:`Long run pace ${fmtPace(paceSec+60)}/mi. Hydrate well.`, dur:Math.ceil(longRun*(paceSec+60)/3600)+1 },
     ].filter(Boolean).slice(0, runsPerWeek);
 
     offsets.slice(0, runsPerWeek).forEach((dayOff, i) => {
@@ -723,84 +726,18 @@ function downloadICS() {
       const run = runTypes[i];
       events.push(icsEvent(`w${w}-d${dayOff}`, `Week ${w}: ${run.name}`, run.desc, runDay, run.dur));
     });
-  }
+  });
 
-  const ics = [
-    'BEGIN:VCALENDAR',
-    'VERSION:2.0',
-    'PRODID:-//Stride//Marathon Training Planner//EN',
-    'CALSCALE:GREGORIAN',
-    'METHOD:PUBLISH',
-    'X-WR-CALNAME:Stride Marathon Training',
-    'X-WR-CALDESC:Your 18-week marathon training plan from Stride',
-    ...events,
-    'END:VCALENDAR'
-  ].join('\r\n');
+  const ics = ['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Stride//Training Planner//EN',
+    'CALSCALE:GREGORIAN','METHOD:PUBLISH',`X-WR-CALNAME:Stride ${cfg.label} Training`,
+    `X-WR-CALDESC:Your ${cfg.weeks}-week ${cfg.label} training plan from Stride`,
+    ...events,'END:VCALENDAR'].join('\r\n');
 
-  const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
+  const blob = new Blob([ics], { type:'text/calendar;charset=utf-8' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
-  a.href = url;
-  a.download = 'stride-marathon-plan.ics';
-  a.click();
+  a.href = url; a.download = `stride-${raceType}-plan.ics`; a.click();
   URL.revokeObjectURL(url);
-}
-
-function renderHR(age, gender) {
-  const maxHR = Math.round(208 - 0.7 * age);
-  const restingHR = gender === 'female'
-    ? Math.max(55, 72 - Math.floor(age / 10))
-    : Math.max(50, 70 - Math.floor(age / 10));
-
-  document.getElementById('hr-stats').innerHTML = `
-    <div class="stat-card">
-      <div class="label">Max Heart Rate</div>
-      <div class="value">${maxHR}</div>
-      <div class="unit">bpm (Tanaka formula)</div>
-    </div>
-    <div class="stat-card">
-      <div class="label">Est. Resting HR</div>
-      <div class="value">${restingHR}</div>
-      <div class="unit">bpm average for age/gender</div>
-    </div>
-    <div class="stat-card">
-      <div class="label">HR Reserve</div>
-      <div class="value">${maxHR - restingHR}</div>
-      <div class="unit">bpm (max − resting)</div>
-    </div>
-  `;
-
-  const zones = [
-    { n: 1, name: 'Recovery',  desc: 'Very easy — warm-up, cool-down, rest days', lo: 0.50, hi: 0.60, color: '#2ecc71' },
-    { n: 2, name: 'Aerobic',   desc: 'Easy runs — builds aerobic base, fat burning', lo: 0.60, hi: 0.70, color: '#3b82f6' },
-    { n: 3, name: 'Tempo',     desc: 'Moderate — marathon race pace zone', lo: 0.70, hi: 0.80, color: '#f59e0b' },
-    { n: 4, name: 'Threshold', desc: 'Hard — lactate threshold, tempo runs', lo: 0.80, hi: 0.90, color: '#e8540a' },
-    { n: 5, name: 'VO₂max',   desc: 'Very hard — interval training, short bursts', lo: 0.90, hi: 1.00, color: '#ef4444' },
-  ];
-
-  document.getElementById('hr-zones').innerHTML = zones.map(z => {
-    const lo = Math.round(z.lo * maxHR);
-    const hi = Math.round(z.hi * maxHR);
-    return `
-    <div class="hr-zone">
-      <div class="hr-zone-header">
-        <div class="hr-zone-number" style="background:${z.color}22;color:${z.color}">Z${z.n}</div>
-        <div class="hr-zone-info">
-          <div class="zone-name">${z.name}</div>
-          <div class="zone-desc">${z.desc}</div>
-        </div>
-        <div class="hr-zone-range">
-          <div class="bpm" style="color:${z.color}">${lo}–${hi} <span style="font-size:0.7rem;color:var(--muted)">bpm</span></div>
-          <div class="pct">${Math.round(z.lo * 100)}–${Math.round(z.hi * 100)}% max HR</div>
-        </div>
-      </div>
-      <div class="hr-bar-wrap">
-        <div class="hr-bar-bg">
-          <div class="hr-bar-fill" style="width:${z.hi * 100}%;background:${z.color}"></div>
-        </div>
-      </div>
-    </div>
-  `}).join('');
 }
 </script>
 </body>
