@@ -10,17 +10,20 @@
     :root {
       --orange: #e8540a;
       --orange-light: #ff7b39;
-      --dark: #0f1117;
-      --card: #1a1d27;
-      --card2: #22263a;
-      --border: #2e3248;
-      --text: #e8eaf0;
-      --muted: #8b90a8;
-      --green: #2ecc71;
-      --blue: #3b82f6;
-      --purple: #a855f7;
-      --red: #ef4444;
-      --yellow: #f59e0b;
+      --orange-dim: rgba(232,84,10,0.12);
+      --dark: #0b0d14;
+      --card: #13161f;
+      --card2: #1c2030;
+      --card3: #242840;
+      --border: #272b3d;
+      --border-bright: #3a3f58;
+      --text: #eaedf5;
+      --muted: #7a80a0;
+      --green: #22d47a;
+      --blue: #4f8ef7;
+      --purple: #b06af3;
+      --red: #f05252;
+      --yellow: #f6a623;
     }
 
     body {
@@ -34,7 +37,7 @@
     #auth-overlay {
       position: fixed;
       inset: 0;
-      background: var(--dark);
+      background: radial-gradient(ellipse at 60% 30%, rgba(232,84,10,0.07) 0%, transparent 60%), var(--dark);
       z-index: 9999;
       display: flex;
       align-items: center;
@@ -43,32 +46,33 @@
     }
     .auth-box {
       background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 2.5rem 2rem;
+      border: 1px solid var(--border-bright);
+      border-radius: 24px;
+      padding: 2.75rem 2.25rem;
       width: 100%;
-      max-width: 400px;
+      max-width: 420px;
       text-align: center;
+      box-shadow: 0 32px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.03) inset;
     }
     .auth-logo {
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 0.75rem;
+      gap: 0.8rem;
       margin-bottom: 1.75rem;
     }
-    .auth-logo h1 { font-size: 1.8rem; font-weight: 800; }
+    .auth-logo h1 { font-size: 2rem; font-weight: 800; letter-spacing: -0.02em; }
     .auth-logo h1 span { color: var(--orange); }
-    .auth-box h2 { font-size: 1.2rem; font-weight: 700; margin-bottom: 0.4rem; }
-    .auth-box p { font-size: 0.875rem; color: var(--muted); margin-bottom: 1.75rem; }
+    .auth-box h2 { font-size: 1.25rem; font-weight: 700; margin-bottom: 0.45rem; }
+    .auth-box p { font-size: 0.875rem; color: var(--muted); margin-bottom: 2rem; line-height: 1.5; }
 
     .btn-google {
       width: 100%;
       background: #fff;
       color: #1f1f1f;
       border: none;
-      border-radius: 10px;
-      padding: 0.75rem 1.25rem;
+      border-radius: 12px;
+      padding: 0.8rem 1.25rem;
       font-size: 0.95rem;
       font-weight: 600;
       cursor: pointer;
@@ -76,10 +80,12 @@
       align-items: center;
       justify-content: center;
       gap: 0.65rem;
-      transition: opacity 0.2s;
+      transition: opacity 0.2s, transform 0.1s;
       margin-bottom: 1.25rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
     }
-    .btn-google:hover { opacity: 0.9; }
+    .btn-google:hover { opacity: 0.92; transform: translateY(-1px); }
+    .btn-google:active { transform: scale(0.98); }
 
     .auth-divider {
       display: flex;
@@ -87,7 +93,9 @@
       gap: 0.75rem;
       margin-bottom: 1.25rem;
       color: var(--muted);
-      font-size: 0.8rem;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
     }
     .auth-divider::before, .auth-divider::after {
       content: '';
@@ -96,59 +104,112 @@
       background: var(--border);
     }
 
-    .auth-field { margin-bottom: 0.875rem; text-align: left; }
-    .auth-field label { display: block; font-size: 0.78rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 0.4rem; }
+    .auth-field { margin-bottom: 0.9rem; text-align: left; }
+    .auth-field label { display: block; font-size: 0.75rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.45rem; }
     .auth-field input {
       width: 100%;
       background: var(--card2);
       border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 0.65rem 0.9rem;
+      border-radius: 10px;
+      padding: 0.7rem 0.95rem;
       color: var(--text);
       font-size: 0.95rem;
-      transition: border-color 0.2s;
+      transition: border-color 0.2s, box-shadow 0.2s;
     }
-    .auth-field input:focus { outline: none; border-color: var(--orange); }
+    .auth-field input:focus { outline: none; border-color: var(--orange); box-shadow: 0 0 0 3px rgba(232,84,10,0.15); }
 
     .btn-signin {
       width: 100%;
-      background: var(--orange);
+      background: linear-gradient(135deg, var(--orange) 0%, var(--orange-light) 100%);
       color: #fff;
       border: none;
-      border-radius: 10px;
-      padding: 0.75rem;
+      border-radius: 12px;
+      padding: 0.8rem;
       font-size: 0.95rem;
       font-weight: 700;
       cursor: pointer;
       margin-top: 0.25rem;
-      transition: background 0.2s;
+      transition: opacity 0.2s, transform 0.1s;
+      box-shadow: 0 4px 16px rgba(232,84,10,0.35);
+      letter-spacing: 0.02em;
     }
-    .btn-signin:hover { background: var(--orange-light); }
+    .btn-signin:hover { opacity: 0.92; transform: translateY(-1px); }
+    .btn-signin:active { transform: scale(0.98); }
 
-    .auth-footer { font-size: 0.8rem; color: var(--muted); margin-top: 1.25rem; }
-    .auth-footer a { color: var(--orange); text-decoration: none; cursor: pointer; }
+    .auth-footer { font-size: 0.82rem; color: var(--muted); margin-top: 1.5rem; }
+    .auth-footer a { color: var(--orange); text-decoration: none; cursor: pointer; font-weight: 600; }
 
-    .auth-error { color: #f87171; font-size: 0.82rem; margin-top: 0.75rem; display: none; }
+    .auth-error { color: #f87171; font-size: 0.82rem; margin-top: 0.75rem; display: none; padding: 0.6rem 0.9rem; background: rgba(248,113,113,0.1); border-radius: 8px; border: 1px solid rgba(248,113,113,0.2); }
+
+    .forgot-link {
+      display: block;
+      text-align: right;
+      font-size: 0.78rem;
+      color: var(--muted);
+      cursor: pointer;
+      margin-top: 0.3rem;
+      transition: color 0.15s;
+    }
+    .forgot-link:hover { color: var(--orange); }
+
+    .reset-success {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 1.5rem 0 0.5rem;
+    }
+    .reset-success .check-icon {
+      width: 52px; height: 52px;
+      background: rgba(34,212,122,0.12);
+      border: 1px solid rgba(34,212,122,0.3);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--green);
+    }
+    .reset-success h3 { font-size: 1.05rem; font-weight: 700; }
+    .reset-success p { font-size: 0.82rem; color: var(--muted); line-height: 1.6; max-width: 280px; }
+    .reset-success .email-highlight { color: var(--text); font-weight: 600; }
+
+    #reset-view { display: none; }
+    .btn-back {
+      background: transparent;
+      border: none;
+      color: var(--muted);
+      font-size: 0.82rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0;
+      margin-bottom: 1.25rem;
+      transition: color 0.15s;
+    }
+    .btn-back:hover { color: var(--text); }
 
     /* ── Header ── */
     header {
-      background: linear-gradient(135deg, #0f1117 0%, #1a1d27 100%);
+      background: linear-gradient(180deg, #0f1220 0%, var(--dark) 100%);
       border-bottom: 1px solid var(--border);
-      padding: 1.5rem 2rem;
+      padding: 1.25rem 2rem;
       display: flex;
       align-items: center;
       gap: 1rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(12px);
     }
     .logo svg { display: block; }
-    header h1 { font-size: 1.6rem; font-weight: 700; }
+    header h1 { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.02em; }
     header h1 span { color: var(--orange); }
-    header p { color: var(--muted); font-size: 0.875rem; margin-top: 0.2rem; }
+    header p { color: var(--muted); font-size: 0.8rem; margin-top: 0.15rem; }
 
     .header-right {
       margin-left: auto;
       display: flex;
       align-items: center;
-      gap: 0.875rem;
+      gap: 0.75rem;
     }
     .user-chip {
       display: flex;
@@ -157,105 +218,151 @@
       background: var(--card2);
       border: 1px solid var(--border);
       border-radius: 20px;
-      padding: 0.35rem 0.75rem 0.35rem 0.35rem;
+      padding: 0.3rem 0.75rem 0.3rem 0.3rem;
     }
     .user-avatar {
       width: 28px;
       height: 28px;
       border-radius: 50%;
-      background: var(--orange);
+      background: linear-gradient(135deg, var(--orange), var(--orange-light));
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.8rem;
-      font-weight: 700;
+      font-size: 0.72rem;
+      font-weight: 800;
       color: #fff;
       flex-shrink: 0;
     }
-    .user-name { font-size: 0.85rem; font-weight: 600; }
+    .user-name { font-size: 0.82rem; font-weight: 600; }
     .btn-signout {
       background: transparent;
       border: 1px solid var(--border);
       border-radius: 8px;
       padding: 0.35rem 0.75rem;
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       color: var(--muted);
       cursor: pointer;
-      transition: border-color 0.2s, color 0.2s;
+      transition: border-color 0.2s, color 0.2s, background 0.2s;
     }
-    .btn-signout:hover { border-color: var(--red); color: var(--red); }
+    .btn-signout:hover { border-color: var(--red); color: var(--red); background: rgba(240,82,82,0.07); }
+
+    /* ── Hero Banner ── */
+    .hero-banner {
+      background: linear-gradient(135deg, rgba(232,84,10,0.15) 0%, rgba(79,142,247,0.06) 60%, transparent 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 2.5rem 2rem;
+      text-align: center;
+    }
+    .hero-banner h2 {
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(135deg, #fff 0%, #c0c8e0 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-banner h2 span {
+      background: linear-gradient(135deg, var(--orange) 0%, var(--orange-light) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-banner p { color: var(--muted); font-size: 0.95rem; max-width: 480px; margin: 0 auto; line-height: 1.6; }
 
     /* ── Layout ── */
-    .container { max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem; }
+    .container { max-width: 1120px; margin: 0 auto; padding: 2.5rem 1.5rem; }
 
     /* ── Form Card ── */
     .form-card {
       background: var(--card);
       border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 2rem;
+      border-radius: 20px;
+      padding: 2.25rem;
       margin-bottom: 2rem;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.3);
     }
-    .form-card h2 { font-size: 1.1rem; font-weight: 600; margin-bottom: 1.5rem; color: var(--orange); text-transform: uppercase; letter-spacing: 0.05em; }
+    .form-card-title {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      margin-bottom: 1.75rem;
+    }
+    .form-card-title .icon-badge {
+      width: 34px; height: 34px;
+      background: var(--orange-dim);
+      border: 1px solid rgba(232,84,10,0.25);
+      border-radius: 9px;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--orange);
+      flex-shrink: 0;
+    }
+    .form-card-title h2 { font-size: 1.05rem; font-weight: 700; color: var(--text); }
 
     .race-toggle {
       display: flex;
       gap: 0;
       border: 1px solid var(--border);
-      border-radius: 10px;
+      border-radius: 12px;
       overflow: hidden;
-      width: 100%;
+      background: var(--card2);
     }
     .race-toggle-btn {
       flex: 1;
-      background: var(--card2);
+      background: transparent;
       border: none;
-      padding: 0.65rem 0.5rem;
+      padding: 0.7rem 0.5rem;
       font-size: 0.875rem;
       font-weight: 600;
       color: var(--muted);
       cursor: pointer;
-      transition: background 0.2s, color 0.2s;
+      transition: all 0.2s;
       white-space: nowrap;
     }
     .race-toggle-btn + .race-toggle-btn { border-left: 1px solid var(--border); }
-    .race-toggle-btn.active { background: var(--orange); color: #fff; }
+    .race-toggle-btn.active {
+      background: linear-gradient(135deg, var(--orange) 0%, var(--orange-light) 100%);
+      color: #fff;
+      box-shadow: 0 2px 10px rgba(232,84,10,0.3);
+    }
 
     .form-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
       gap: 1.25rem;
     }
 
     .field label {
       display: block;
-      font-size: 0.8rem;
-      font-weight: 600;
+      font-size: 0.75rem;
+      font-weight: 700;
       color: var(--muted);
       text-transform: uppercase;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.06em;
       margin-bottom: 0.5rem;
     }
-    .field label .opt { font-weight: 400; text-transform: none; font-size: 0.72rem; color: var(--muted); opacity: 0.7; }
+    .field label .opt { font-weight: 400; text-transform: none; font-size: 0.7rem; opacity: 0.7; }
     .field input, .field select {
       width: 100%;
       background: var(--card2);
       border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 0.65rem 0.9rem;
+      border-radius: 10px;
+      padding: 0.7rem 0.95rem;
       color: var(--text);
       font-size: 0.95rem;
-      transition: border-color 0.2s;
+      transition: border-color 0.2s, box-shadow 0.2s;
     }
     .field input:focus, .field select:focus {
       outline: none;
       border-color: var(--orange);
+      box-shadow: 0 0 0 3px rgba(232,84,10,0.12);
     }
     .field select option { background: var(--card2); }
 
     .split-row { display: flex; gap: 0.5rem; align-items: center; }
     .split-row input { text-align: center; }
-    .split-sep { color: var(--muted); font-size: 0.85rem; white-space: nowrap; flex-shrink: 0; padding-top: 0.1rem; }
+    .split-sep { color: var(--muted); font-size: 0.85rem; white-space: nowrap; flex-shrink: 0; }
 
     .weeks-chip {
       font-size: 0.78rem;
@@ -267,23 +374,27 @@
     .weeks-chip.warn span { color: var(--yellow); }
     .weeks-chip.error span { color: var(--red); }
 
-    .btn {
-      margin-top: 1.5rem;
-      background: var(--orange);
+    .btn-generate {
+      margin-top: 1.75rem;
+      background: linear-gradient(135deg, var(--orange) 0%, var(--orange-light) 100%);
       color: #fff;
       border: none;
-      border-radius: 10px;
-      padding: 0.8rem 2.5rem;
+      border-radius: 12px;
+      padding: 0.9rem 2.75rem;
       font-size: 1rem;
       font-weight: 700;
       cursor: pointer;
-      letter-spacing: 0.03em;
-      transition: background 0.2s, transform 0.1s;
+      letter-spacing: 0.02em;
+      transition: opacity 0.2s, transform 0.1s, box-shadow 0.2s;
+      box-shadow: 0 4px 20px rgba(232,84,10,0.4);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
     }
-    .btn:hover { background: var(--orange-light); }
-    .btn:active { transform: scale(0.97); }
+    .btn-generate:hover { opacity: 0.9; transform: translateY(-2px); box-shadow: 0 8px 28px rgba(232,84,10,0.45); }
+    .btn-generate:active { transform: scale(0.97); }
 
-    .error-msg { color: #f87171; font-size: 0.85rem; margin-top: 1rem; display: none; }
+    .error-msg { color: #f87171; font-size: 0.85rem; margin-top: 1rem; display: none; padding: 0.7rem 1rem; background: rgba(248,113,113,0.08); border-radius: 10px; border: 1px solid rgba(248,113,113,0.2); }
 
     #results { display: none; }
 
@@ -294,141 +405,195 @@
       margin-bottom: 1.5rem;
       flex-wrap: wrap;
     }
-    .results-header h2 { font-size: 1.3rem; font-weight: 700; }
+    .results-header h2 { font-size: 1.4rem; font-weight: 800; letter-spacing: -0.02em; }
     .badge {
-      background: var(--orange);
+      background: linear-gradient(135deg, var(--orange), var(--orange-light));
       color: #fff;
       border-radius: 20px;
-      padding: 0.2rem 0.75rem;
-      font-size: 0.75rem;
+      padding: 0.2rem 0.8rem;
+      font-size: 0.72rem;
       font-weight: 700;
+      letter-spacing: 0.04em;
     }
 
-    .tabs { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
-    .tab {
-      background: var(--card);
+    /* ── Pill Tabs ── */
+    .tabs {
+      display: flex;
+      gap: 0.25rem;
+      margin-bottom: 1.75rem;
+      background: var(--card2);
       border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 0.55rem 1.1rem;
+      border-radius: 14px;
+      padding: 0.35rem;
+      width: fit-content;
+    }
+    .tab {
+      background: transparent;
+      border: none;
+      border-radius: 10px;
+      padding: 0.55rem 1.4rem;
       font-size: 0.875rem;
       font-weight: 600;
       color: var(--muted);
       cursor: pointer;
       transition: all 0.2s;
+      white-space: nowrap;
     }
-    .tab:hover { border-color: var(--orange); color: var(--text); }
-    .tab.active { background: var(--orange); border-color: var(--orange); color: #fff; }
+    .tab:hover { color: var(--text); }
+    .tab.active {
+      background: var(--card);
+      color: var(--text);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      border: 1px solid var(--border-bright);
+    }
 
     .tab-panel { display: none; }
     .tab-panel.active { display: block; }
 
+    /* ── Stats Row ── */
     .stats-row {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
       gap: 1rem;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.75rem;
     }
     .stat-card {
       background: var(--card);
       border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 1.25rem;
+      border-radius: 16px;
+      padding: 1.5rem 1.25rem;
       text-align: center;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.2s, transform 0.2s;
     }
-    .stat-card .label { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.4rem; }
-    .stat-card .value { font-size: 1.6rem; font-weight: 700; color: var(--orange); }
-    .stat-card .unit { font-size: 0.75rem; color: var(--muted); margin-top: 0.2rem; }
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--orange), var(--orange-light));
+    }
+    .stat-card:hover { border-color: var(--border-bright); transform: translateY(-2px); }
+    .stat-card .label { font-size: 0.7rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 0.5rem; font-weight: 700; }
+    .stat-card .value { font-size: 1.8rem; font-weight: 800; color: var(--orange); letter-spacing: -0.02em; line-height: 1; }
+    .stat-card .unit { font-size: 0.72rem; color: var(--muted); margin-top: 0.4rem; }
 
     .section-title {
-      font-size: 0.8rem;
-      font-weight: 700;
+      font-size: 0.75rem;
+      font-weight: 800;
       color: var(--muted);
       text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-bottom: 0.75rem;
-      margin-top: 1.5rem;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.875rem;
+      margin-top: 1.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
     }
+    .section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
+    /* ── Pace Table ── */
     .pace-table {
       background: var(--card);
       border: 1px solid var(--border);
-      border-radius: 12px;
+      border-radius: 16px;
       overflow: hidden;
     }
     .pace-row-item {
       display: flex;
       align-items: center;
-      padding: 0.85rem 1.25rem;
+      padding: 1rem 1.35rem;
       gap: 1rem;
       border-bottom: 1px solid var(--border);
+      transition: background 0.15s;
     }
     .pace-row-item:last-child { border-bottom: none; }
-    .pace-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
-    .pace-name { flex: 1; font-weight: 600; font-size: 0.95rem; }
+    .pace-row-item:hover { background: var(--card2); }
+    .pace-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; box-shadow: 0 0 6px currentColor; }
+    .pace-name { flex: 1; font-weight: 700; font-size: 0.9rem; }
     .pace-desc { flex: 2; font-size: 0.8rem; color: var(--muted); }
-    .pace-val { font-size: 1rem; font-weight: 700; white-space: nowrap; }
+    .pace-val { font-size: 1.1rem; font-weight: 800; white-space: nowrap; letter-spacing: -0.01em; }
 
+    /* ── Plan ── */
     .plan-info {
       background: var(--card);
       border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 1rem 1.25rem;
-      margin-bottom: 1rem;
+      border-radius: 16px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1.25rem;
       display: flex;
-      gap: 2rem;
+      gap: 2.5rem;
       flex-wrap: wrap;
     }
-    .plan-info-item .pi-label { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; }
-    .plan-info-item .pi-val { font-size: 1rem; font-weight: 700; color: var(--text); }
+    .plan-info-item .pi-label { font-size: 0.7rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; font-weight: 700; margin-bottom: 0.25rem; }
+    .plan-info-item .pi-val { font-size: 1.05rem; font-weight: 700; color: var(--text); }
 
     .plan-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 0.75rem;
+      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+      gap: 0.875rem;
     }
     .week-card {
       background: var(--card);
       border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 1rem 1.25rem;
+      border-radius: 16px;
+      padding: 1.25rem;
+      transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+      position: relative;
+      overflow: hidden;
     }
-    .week-card.peak { border-color: var(--orange); }
-    .week-card.taper { border-color: var(--blue); }
-    .week-card.race { border-color: var(--green); }
+    .week-card::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--border);
+      transition: background 0.2s;
+    }
+    .week-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.25); }
+    .week-card.peak { border-color: rgba(232,84,10,0.35); }
+    .week-card.peak::after { background: linear-gradient(90deg, var(--orange), var(--orange-light)); }
+    .week-card.taper { border-color: rgba(79,142,247,0.3); }
+    .week-card.taper::after { background: var(--blue); }
+    .week-card.race { border-color: rgba(34,212,122,0.35); }
+    .week-card.race::after { background: var(--green); }
+    .week-card.build::after { background: var(--border-bright); }
     .week-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 0.75rem;
+      margin-bottom: 0.875rem;
     }
-    .week-num { font-weight: 700; font-size: 0.875rem; }
+    .week-num { font-weight: 800; font-size: 0.875rem; color: var(--muted); }
     .week-badge {
-      font-size: 0.65rem;
+      font-size: 0.62rem;
       font-weight: 700;
-      padding: 0.15rem 0.5rem;
+      padding: 0.2rem 0.6rem;
       border-radius: 20px;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.06em;
     }
-    .badge-build { background: rgba(59,130,246,0.2); color: var(--blue); }
-    .badge-peak { background: rgba(232,84,10,0.2); color: var(--orange); }
-    .badge-taper { background: rgba(59,130,246,0.2); color: var(--blue); }
-    .badge-race { background: rgba(46,204,113,0.2); color: var(--green); }
+    .badge-build { background: rgba(79,142,247,0.12); color: var(--blue); border: 1px solid rgba(79,142,247,0.2); }
+    .badge-peak { background: rgba(232,84,10,0.12); color: var(--orange); border: 1px solid rgba(232,84,10,0.25); }
+    .badge-taper { background: rgba(79,142,247,0.12); color: var(--blue); border: 1px solid rgba(79,142,247,0.2); }
+    .badge-race { background: rgba(34,212,122,0.12); color: var(--green); border: 1px solid rgba(34,212,122,0.25); }
 
-    .week-miles { font-size: 1.4rem; font-weight: 700; color: var(--orange); }
-    .week-miles span { font-size: 0.75rem; color: var(--muted); font-weight: 400; }
-    .week-runs { margin-top: 0.5rem; font-size: 0.8rem; color: var(--muted); line-height: 1.6; }
+    .week-miles { font-size: 1.6rem; font-weight: 800; color: var(--text); letter-spacing: -0.03em; line-height: 1; }
+    .week-miles span { font-size: 0.8rem; color: var(--muted); font-weight: 500; margin-left: 0.25rem; }
+    .week-runs { margin-top: 0.625rem; font-size: 0.78rem; color: var(--muted); line-height: 1.7; }
 
-    .week-bar-wrap { margin-top: 0.75rem; }
-    .week-bar-bg { background: var(--card2); border-radius: 4px; height: 4px; }
-    .week-bar-fill { height: 100%; border-radius: 4px; background: var(--orange); transition: width 0.5s; }
+    .week-bar-wrap { margin-top: 1rem; }
+    .week-bar-bg { background: var(--card2); border-radius: 4px; height: 3px; }
+    .week-bar-fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg, var(--orange), var(--orange-light)); transition: width 0.6s cubic-bezier(0.4,0,0.2,1); }
 
+    /* ── Calendar Bar ── */
     .cal-bar {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 1rem 1.25rem;
-      margin-bottom: 1rem;
+      background: linear-gradient(135deg, var(--card) 0%, var(--card2) 100%);
+      border: 1px solid var(--border-bright);
+      border-radius: 16px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1.25rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -436,25 +601,26 @@
       gap: 1rem;
     }
     .cal-bar-text .cal-title { font-weight: 700; font-size: 0.95rem; }
-    .cal-bar-text .cal-sub { font-size: 0.8rem; color: var(--muted); margin-top: 0.15rem; }
+    .cal-bar-text .cal-sub { font-size: 0.8rem; color: var(--muted); margin-top: 0.2rem; }
 
     .cal-dropdown-wrap { position: relative; }
     .btn-cal {
       background: #fff;
       color: #1a1d27;
       border: none;
-      border-radius: 8px;
-      padding: 0.6rem 1.25rem;
+      border-radius: 10px;
+      padding: 0.65rem 1.35rem;
       font-size: 0.875rem;
       font-weight: 700;
       cursor: pointer;
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      transition: opacity 0.2s, transform 0.1s;
+      transition: opacity 0.2s, transform 0.1s, box-shadow 0.2s;
       white-space: nowrap;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.25);
     }
-    .btn-cal:hover { opacity: 0.9; }
+    .btn-cal:hover { opacity: 0.92; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(0,0,0,0.3); }
     .btn-cal:active { transform: scale(0.97); }
 
     .cal-menu {
@@ -463,19 +629,19 @@
       right: 0;
       top: calc(100% + 8px);
       background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
+      border: 1px solid var(--border-bright);
+      border-radius: 14px;
       overflow: hidden;
-      min-width: 200px;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+      min-width: 210px;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.5);
       z-index: 100;
     }
     .cal-menu.open { display: block; }
     .cal-menu-item {
       display: flex;
       align-items: center;
-      gap: 0.75rem;
-      padding: 0.85rem 1.1rem;
+      gap: 0.875rem;
+      padding: 0.9rem 1.1rem;
       cursor: pointer;
       transition: background 0.15s;
       border-bottom: 1px solid var(--border);
@@ -483,34 +649,40 @@
     .cal-menu-item:last-child { border-bottom: none; }
     .cal-menu-item:hover { background: var(--card2); }
     .cal-menu-item .cal-icon { font-size: 1.2rem; flex-shrink: 0; }
-    .cal-menu-item .cal-label { font-size: 0.875rem; font-weight: 600; }
-    .cal-menu-item .cal-hint { font-size: 0.72rem; color: var(--muted); margin-top: 0.1rem; }
+    .cal-menu-item .cal-label { font-size: 0.875rem; font-weight: 700; }
+    .cal-menu-item .cal-hint { font-size: 0.7rem; color: var(--muted); margin-top: 0.1rem; }
 
+    /* ── Toast ── */
     .toast {
       position: fixed;
-      bottom: 1.5rem;
+      bottom: 1.75rem;
       left: 50%;
-      transform: translateX(-50%) translateY(100px);
+      transform: translateX(-50%) translateY(120px);
       background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 0.75rem 1.25rem;
+      border: 1px solid var(--border-bright);
+      border-radius: 12px;
+      padding: 0.8rem 1.5rem;
       font-size: 0.875rem;
       font-weight: 600;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
-      transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+      transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1);
       z-index: 1000;
       white-space: nowrap;
     }
     .toast.show { transform: translateX(-50%) translateY(0); }
 
+    /* ── Mobile ── */
     @media (max-width: 600px) {
-      header { padding: 1.2rem 1rem; flex-wrap: wrap; }
+      header { padding: 1rem; flex-wrap: wrap; }
       .header-right { width: 100%; justify-content: flex-end; }
+      .hero-banner { padding: 1.75rem 1rem; }
+      .hero-banner h2 { font-size: 1.5rem; }
       .container { padding: 1.25rem 1rem; }
       .form-card { padding: 1.25rem; }
       .pace-desc { display: none; }
       .user-name { display: none; }
+      .tabs { width: 100%; }
+      .tab { flex: 1; text-align: center; padding: 0.55rem 0.75rem; }
     }
   </style>
 </head>
@@ -520,7 +692,7 @@
 <div id="auth-overlay">
   <div class="auth-box">
     <div class="auth-logo">
-      <svg width="40" height="40" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <svg width="42" height="42" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <linearGradient id="logoGrad2" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
             <stop offset="0%" stop-color="#e8540a"/>
@@ -556,6 +728,7 @@
     <div class="auth-field">
       <label>Password</label>
       <input type="password" id="auth-password" placeholder="••••••••" onkeydown="authKeydown(event)" />
+      <span class="forgot-link" onclick="showResetView()">Forgot password?</span>
     </div>
 
     <button class="btn-signin" onclick="signInWithEmail()">Sign In</button>
@@ -565,6 +738,39 @@
       Don't have an account? <a onclick="signUpFlow()">Sign up</a>
     </div>
   </div>
+
+  <!-- ── Reset Password View ── -->
+  <div class="auth-box" id="reset-view">
+    <button class="btn-back" onclick="hideResetView()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 5-7 7 7 7"/></svg>
+      Back to sign in
+    </button>
+
+    <div id="reset-form-section">
+      <div class="auth-logo" style="margin-bottom:1rem">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      </div>
+      <h2>Reset your password</h2>
+      <p style="margin-bottom:1.5rem">Enter the email address linked to your account and we'll send you a reset link.</p>
+
+      <div class="auth-field">
+        <label>Email address</label>
+        <input type="email" id="reset-email" placeholder="you@example.com" onkeydown="resetKeydown(event)" />
+      </div>
+
+      <button class="btn-signin" onclick="sendResetEmail()">Send Reset Link</button>
+      <div class="auth-error" id="reset-error"></div>
+    </div>
+
+    <div class="reset-success" id="reset-success">
+      <div class="check-icon">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <h3>Check your inbox</h3>
+      <p>We've sent a password reset link to <span class="email-highlight" id="reset-sent-email"></span>. Check your spam folder if you don't see it.</p>
+      <button class="btn-signin" style="margin-top:0.5rem" onclick="hideResetView()">Back to Sign In</button>
+    </div>
+  </div>
 </div>
 
 <!-- Toast -->
@@ -572,7 +778,7 @@
 
 <header>
   <div class="logo">
-    <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg width="42" height="42" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <linearGradient id="logoGrad" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
           <stop offset="0%" stop-color="#e8540a"/>
@@ -592,7 +798,7 @@
   </div>
   <div>
     <h1><span>Stride</span></h1>
-    <p>Personalized training plans and paces for half marathons &amp; marathons</p>
+    <p>Personalized training plans &amp; pace guides for every runner</p>
   </div>
   <div class="header-right">
     <div class="user-chip" id="user-chip">
@@ -603,10 +809,20 @@
   </div>
 </header>
 
+<div class="hero-banner">
+  <h2>Build your <span>perfect race plan</span></h2>
+  <p>Enter your details below to get a custom training schedule, target paces, and calendar export.</p>
+</div>
+
 <div class="container">
 
   <div class="form-card">
-    <h2>Your Profile</h2>
+    <div class="form-card-title">
+      <div class="icon-badge">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      </div>
+      <h2>Your Profile</h2>
+    </div>
     <div class="form-grid">
 
       <div class="field">
@@ -670,7 +886,10 @@
       </div>
 
     </div>
-    <button class="btn" onclick="generate()">Generate My Plan →</button>
+    <button class="btn-generate" onclick="generate()">
+      Generate My Plan
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+    </button>
     <div class="error-msg" id="error-msg"></div>
   </div>
 
@@ -678,21 +897,15 @@
     <div class="results-header">
       <h2>Your Training Plan</h2>
       <div class="badge" id="result-badge"></div>
-      <div class="badge" id="result-race-badge" style="background:var(--blue)"></div>
+      <div class="badge" id="result-race-badge" style="background:linear-gradient(135deg,var(--blue),#7bb3ff)"></div>
     </div>
 
     <div class="tabs">
-      <div class="tab active" onclick="switchTab('pace')">Pace Calculator</div>
-      <div class="tab" onclick="switchTab('plan')">Training Schedule</div>
+      <div class="tab active" onclick="switchTab('plan')">Training Schedule</div>
+      <div class="tab" onclick="switchTab('pace')">Pace Calculator</div>
     </div>
 
-    <div class="tab-panel active" id="tab-pace">
-      <div class="stats-row" id="finish-stats"></div>
-      <div class="section-title">Training Paces</div>
-      <div class="pace-table" id="pace-table"></div>
-    </div>
-
-    <div class="tab-panel" id="tab-plan">
+    <div class="tab-panel active" id="tab-plan">
       <div class="cal-bar" id="cal-bar" style="display:none">
         <div class="cal-bar-text">
           <div class="cal-title">Add to Calendar</div>
@@ -700,7 +913,7 @@
         </div>
         <div class="cal-dropdown-wrap" id="cal-dropdown-wrap">
           <button class="btn-cal" onclick="toggleCalMenu()">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
             Add to Calendar
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
           </button>
@@ -729,19 +942,20 @@
       <div class="plan-info" id="plan-info"></div>
       <div class="plan-grid" id="plan-grid"></div>
     </div>
+
+    <div class="tab-panel" id="tab-pace">
+      <div class="stats-row" id="finish-stats"></div>
+      <div class="section-title">Training Paces</div>
+      <div class="pace-table" id="pace-table"></div>
+    </div>
   </div>
 
 </div>
 
 <script>
-// ─────────────────────────────────────────────
-// Auth
-// ─────────────────────────────────────────────
 function checkAuth() {
   const user = localStorage.getItem('stride_user');
-  if (user) {
-    showApp(JSON.parse(user));
-  }
+  if (user) showApp(JSON.parse(user));
 }
 
 function signInWithGoogle() {
@@ -754,17 +968,8 @@ function signInWithEmail() {
   const email = document.getElementById('auth-email').value.trim();
   const password = document.getElementById('auth-password').value;
   const errEl = document.getElementById('auth-error');
-
-  if (!email || !password) {
-    errEl.textContent = 'Please enter your email and password.';
-    errEl.style.display = 'block';
-    return;
-  }
-  if (!email.includes('@')) {
-    errEl.textContent = 'Please enter a valid email address.';
-    errEl.style.display = 'block';
-    return;
-  }
+  if (!email || !password) { errEl.textContent = 'Please enter your email and password.'; errEl.style.display = 'block'; return; }
+  if (!email.includes('@')) { errEl.textContent = 'Please enter a valid email address.'; errEl.style.display = 'block'; return; }
   errEl.style.display = 'none';
   const name = email.split('@')[0].replace(/[._-]/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
   completeSignIn(name, email, 'email');
@@ -782,8 +987,34 @@ function signInFlow() {
   document.querySelector('.auth-footer').innerHTML = "Don't have an account? <a onclick=\"signUpFlow()\">Sign up</a>";
 }
 
-function authKeydown(e) {
-  if (e.key === 'Enter') signInWithEmail();
+function authKeydown(e) { if (e.key === 'Enter') signInWithEmail(); }
+
+function showResetView() {
+  document.querySelector('.auth-box:not(#reset-view)').style.display = 'none';
+  document.getElementById('reset-view').style.display = 'block';
+  document.getElementById('reset-form-section').style.display = 'block';
+  document.getElementById('reset-success').style.display = 'none';
+  document.getElementById('reset-error').style.display = 'none';
+  document.getElementById('reset-email').value = document.getElementById('auth-email').value || '';
+  document.getElementById('reset-email').focus();
+}
+
+function hideResetView() {
+  document.getElementById('reset-view').style.display = 'none';
+  document.querySelector('.auth-box:not(#reset-view)').style.display = 'block';
+}
+
+function resetKeydown(e) { if (e.key === 'Enter') sendResetEmail(); }
+
+function sendResetEmail() {
+  const email = document.getElementById('reset-email').value.trim();
+  const errEl = document.getElementById('reset-error');
+  errEl.style.display = 'none';
+  if (!email) { errEl.textContent = 'Please enter your email address.'; errEl.style.display = 'block'; return; }
+  if (!email.includes('@') || !email.includes('.')) { errEl.textContent = 'Please enter a valid email address.'; errEl.style.display = 'block'; return; }
+  document.getElementById('reset-sent-email').textContent = email;
+  document.getElementById('reset-form-section').style.display = 'none';
+  document.getElementById('reset-success').style.display = 'flex';
 }
 
 function completeSignIn(name, email, method) {
@@ -807,21 +1038,16 @@ function signOut() {
   document.getElementById('auth-email').value = '';
   document.getElementById('auth-password').value = '';
   document.getElementById('auth-error').style.display = 'none';
+  document.getElementById('reset-view').style.display = 'none';
+  document.querySelector('.auth-box:not(#reset-view)').style.display = 'block';
 }
 
-// ─────────────────────────────────────────────
-// State
-// ─────────────────────────────────────────────
 let _raceType = 'half';
 let _planData = null;
 
 const RACE_CONFIG = {
-  half: { dist: 13.1094, weeks: 12, label: 'Half Marathon',
-          bases: { beginner: 15, intermediate: 20, advanced: 28 },
-          peaks: { beginner: 30, intermediate: 40, advanced: 50 } },
-  full: { dist: 26.2188, weeks: 18, label: 'Marathon',
-          bases: { beginner: 18, intermediate: 25, advanced: 32 },
-          peaks: { beginner: 40, intermediate: 50, advanced: 60 } },
+  half: { dist: 13.1094, weeks: 12, label: 'Half Marathon', bases: { beginner: 15, intermediate: 20, advanced: 28 }, peaks: { beginner: 30, intermediate: 40, advanced: 50 } },
+  full: { dist: 26.2188, weeks: 18, label: 'Marathon', bases: { beginner: 18, intermediate: 25, advanced: 32 }, peaks: { beginner: 40, intermediate: 50, advanced: 60 } },
 };
 
 function setRaceType(type) {
@@ -831,22 +1057,11 @@ function setRaceType(type) {
   updateWeeksChip();
 }
 
-function fmtPace(totalSec) {
-  const m = Math.floor(totalSec / 60);
-  const s = Math.round(totalSec % 60);
-  return `${m}:${String(s).padStart(2, '0')}`;
-}
-
-function fmtTime(totalMin) {
-  const h = Math.floor(totalMin / 60);
-  const m = Math.round(totalMin % 60);
-  return h > 0 ? `${h}h ${m}m` : `${m}m`;
-}
+function fmtPace(totalSec) { const m = Math.floor(totalSec / 60); const s = Math.round(totalSec % 60); return `${m}:${String(s).padStart(2, '0')}`; }
+function fmtTime(totalMin) { const h = Math.floor(totalMin / 60); const m = Math.round(totalMin % 60); return h > 0 ? `${h}h ${m}m` : `${m}m`; }
 
 function switchTab(name) {
-  document.querySelectorAll('.tab').forEach((t, i) => {
-    t.classList.toggle('active', ['pace', 'plan'][i] === name);
-  });
+  document.querySelectorAll('.tab').forEach((t, i) => { t.classList.toggle('active', ['plan', 'pace'][i] === name); });
   document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
   document.getElementById(`tab-${name}`).classList.add('active');
 }
@@ -870,96 +1085,53 @@ function updateWeeksChip() {
   const chip = document.getElementById('weeks-chip');
   if (!startVal || !raceVal) { chip.innerHTML = ''; chip.className = 'weeks-chip'; return; }
   const diff = Math.round((new Date(raceVal + 'T00:00:00') - new Date(startVal + 'T00:00:00')) / (7 * 86400000));
-  if (diff <= 0) {
-    chip.className = 'weeks-chip error';
-    chip.innerHTML = '<span>Race date must be after start date</span>';
-  } else if (diff < 6) {
-    chip.className = 'weeks-chip warn';
-    chip.innerHTML = `<span>${diff} week${diff !== 1 ? 's' : ''}</span> — too short, aim for 8+ weeks`;
-  } else {
-    chip.className = 'weeks-chip';
-    chip.innerHTML = `<span>${diff} week${diff !== 1 ? 's' : ''}</span> of training`;
-  }
+  if (diff <= 0) { chip.className = 'weeks-chip error'; chip.innerHTML = '<span>Race date must be after start date</span>'; }
+  else if (diff < 6) { chip.className = 'weeks-chip warn'; chip.innerHTML = `<span>${diff} week${diff !== 1 ? 's' : ''}</span> — too short, aim for 8+ weeks`; }
+  else { chip.className = 'weeks-chip'; chip.innerHTML = `<span>${diff} week${diff !== 1 ? 's' : ''}</span> of training`; }
 }
 
-function toggleCalMenu() {
-  document.getElementById('cal-menu').classList.toggle('open');
-}
+function toggleCalMenu() { document.getElementById('cal-menu').classList.toggle('open'); }
 
 document.addEventListener('click', (e) => {
   const wrap = document.getElementById('cal-dropdown-wrap');
-  if (wrap && !wrap.contains(e.target)) {
-    document.getElementById('cal-menu').classList.remove('open');
-  }
+  if (wrap && !wrap.contains(e.target)) document.getElementById('cal-menu').classList.remove('open');
 });
 
-function addToCalendar(provider) {
-  document.getElementById('cal-menu').classList.remove('open');
-  downloadICS(provider);
-}
+function addToCalendar(provider) { document.getElementById('cal-menu').classList.remove('open'); downloadICS(provider); }
 
 function showToast(msg) {
   const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
+  t.textContent = msg; t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 3000);
 }
 
 function generate() {
-  const gender       = document.getElementById('gender').value;
-  const heightFt     = parseInt(document.getElementById('height-ft').value) || 0;
-  const heightIn     = parseInt(document.getElementById('height-in').value) || 0;
-  const weight       = parseFloat(document.getElementById('weight').value) || null;
-  const pMin         = parseInt(document.getElementById('pace-min').value);
-  const pSec         = parseInt(document.getElementById('pace-sec').value) || 0;
-  const fitness      = document.getElementById('fitness').value;
+  const gender = document.getElementById('gender').value;
+  const heightFt = parseInt(document.getElementById('height-ft').value) || 0;
+  const heightIn = parseInt(document.getElementById('height-in').value) || 0;
+  const weight = parseFloat(document.getElementById('weight').value) || null;
+  const pMin = parseInt(document.getElementById('pace-min').value);
+  const pSec = parseInt(document.getElementById('pace-sec').value) || 0;
+  const fitness = document.getElementById('fitness').value;
   const startDateVal = document.getElementById('start-date').value;
-  const raceDateVal  = document.getElementById('race-date').value;
-
+  const raceDateVal = document.getElementById('race-date').value;
   const errEl = document.getElementById('error-msg');
   errEl.style.display = 'none';
-
-  if (!heightFt || !pMin || !startDateVal || !raceDateVal) {
-    errEl.textContent = 'Please fill in height, target pace, and both dates.';
-    errEl.style.display = 'block'; return;
-  }
+  if (!heightFt || !pMin || !startDateVal || !raceDateVal) { errEl.textContent = 'Please fill in height, target pace, and both dates.'; errEl.style.display = 'block'; return; }
   const heightInches = heightFt * 12 + heightIn;
-  if (heightInches < 48 || heightInches > 96) {
-    errEl.textContent = 'Height must be between 4 ft 0 in and 8 ft 0 in.';
-    errEl.style.display = 'block'; return;
-  }
-  if (pMin < 4 || pMin > 20) {
-    errEl.textContent = 'Target pace must be between 4:00 and 20:00 per mile.';
-    errEl.style.display = 'block'; return;
-  }
-
-  const totalWeeks = Math.round(
-    (new Date(raceDateVal + 'T00:00:00') - new Date(startDateVal + 'T00:00:00')) / (7 * 86400000)
-  );
-  if (totalWeeks <= 0) {
-    errEl.textContent = 'Race date must be after training start date.';
-    errEl.style.display = 'block'; return;
-  }
-  if (totalWeeks < 6) {
-    errEl.textContent = 'You need at least 6 weeks of training. Try moving the start date earlier.';
-    errEl.style.display = 'block'; return;
-  }
-  if (totalWeeks > 52) {
-    errEl.textContent = 'Training plan can be at most 52 weeks. Try moving the start date later.';
-    errEl.style.display = 'block'; return;
-  }
-
+  if (heightInches < 48 || heightInches > 96) { errEl.textContent = 'Height must be between 4 ft 0 in and 8 ft 0 in.'; errEl.style.display = 'block'; return; }
+  if (pMin < 4 || pMin > 20) { errEl.textContent = 'Target pace must be between 4:00 and 20:00 per mile.'; errEl.style.display = 'block'; return; }
+  const totalWeeks = Math.round((new Date(raceDateVal + 'T00:00:00') - new Date(startDateVal + 'T00:00:00')) / (7 * 86400000));
+  if (totalWeeks <= 0) { errEl.textContent = 'Race date must be after training start date.'; errEl.style.display = 'block'; return; }
+  if (totalWeeks < 6) { errEl.textContent = 'You need at least 6 weeks of training. Try moving the start date earlier.'; errEl.style.display = 'block'; return; }
+  if (totalWeeks > 52) { errEl.textContent = 'Training plan can be at most 52 weeks. Try moving the start date later.'; errEl.style.display = 'block'; return; }
   const paceSec = pMin * 60 + pSec;
   const cfg = RACE_CONFIG[_raceType];
-
   _planData = { paceSec, fitness, startDateStr: startDateVal, raceDateVal, raceType: _raceType, totalWeeks };
-
   document.getElementById('result-badge').textContent = fitness.charAt(0).toUpperCase() + fitness.slice(1);
   document.getElementById('result-race-badge').textContent = cfg.label;
-
-  renderPace(paceSec, weight, heightInches, gender);
   renderPlan(paceSec, fitness, startDateVal, raceDateVal, totalWeeks);
-
+  renderPace(paceSec, weight, heightInches, gender);
   document.getElementById('results').style.display = 'block';
   document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
@@ -969,79 +1141,46 @@ function renderPace(paceSec, weight, heightInches, gender) {
   const finishMin = (paceSec / 60) * cfg.dist;
   const speedMpm = 1609.34 / paceSec;
   const vo2max = Math.max(20, Math.round(-4.6 + 0.182258 * speedMpm + 0.000104 * speedMpm * speedMpm));
-
   let bmiCard = '';
   if (weight && heightInches) {
     const bmi = (weight / (heightInches * heightInches)) * 703;
-    bmiCard = `
-      <div class="stat-card">
-        <div class="label">BMI</div>
-        <div class="value">${bmi.toFixed(1)}</div>
-        <div class="unit">${bmi < 18.5 ? 'Underweight' : bmi < 25 ? 'Normal' : bmi < 30 ? 'Overweight' : 'Obese'}</div>
-      </div>`;
+    bmiCard = `<div class="stat-card"><div class="label">BMI</div><div class="value">${bmi.toFixed(1)}</div><div class="unit">${bmi < 18.5 ? 'Underweight' : bmi < 25 ? 'Normal' : bmi < 30 ? 'Overweight' : 'Obese'}</div></div>`;
   }
-
   document.getElementById('finish-stats').innerHTML = `
-    <div class="stat-card">
-      <div class="label">Finish Time</div>
-      <div class="value">${fmtTime(finishMin)}</div>
-      <div class="unit">${cfg.label} (${cfg.dist} mi)</div>
-    </div>
-    <div class="stat-card">
-      <div class="label">Target Pace</div>
-      <div class="value">${fmtPace(paceSec)}</div>
-      <div class="unit">min : sec per mile</div>
-    </div>
-    <div class="stat-card">
-      <div class="label">Est. VO₂max</div>
-      <div class="value">${vo2max}</div>
-      <div class="unit">mL/kg/min</div>
-    </div>
-    ${bmiCard}
-  `;
-
+    <div class="stat-card"><div class="label">Finish Time</div><div class="value">${fmtTime(finishMin)}</div><div class="unit">${cfg.label} · ${cfg.dist} mi</div></div>
+    <div class="stat-card"><div class="label">Target Pace</div><div class="value">${fmtPace(paceSec)}</div><div class="unit">min : sec per mile</div></div>
+    <div class="stat-card"><div class="label">Est. VO₂max</div><div class="value">${vo2max}</div><div class="unit">mL / kg / min</div></div>
+    ${bmiCard}`;
   const paces = [
-    { name: 'Easy / Recovery',    color: '#2ecc71', desc: 'Conversational — most of your runs',         offset:  90 },
-    { name: 'Long Run',           color: '#3b82f6', desc: 'Slightly easier than easy, weekly long run', offset:  60 },
-    { name: `${cfg.label} Race`,  color: '#e8540a', desc: 'Your target race day pace',                  offset:   0 },
-    { name: 'Tempo / Threshold',  color: '#f59e0b', desc: 'Comfortably hard — 1 hr race pace',          offset: -20 },
-    { name: 'Interval / VO₂max', color: '#a855f7', desc: 'Hard effort — short repeats',                offset: -45 },
-    { name: 'Repetition',         color: '#ef4444', desc: 'Very fast — speed work',                     offset: -75 },
+    { name: 'Easy / Recovery',    color: '#22d47a', desc: 'Conversational — the bulk of your training',    offset:  90 },
+    { name: 'Long Run',           color: '#4f8ef7', desc: 'Slightly slower than easy, for your weekly LR', offset:  60 },
+    { name: `${cfg.label} Race`,  color: '#e8540a', desc: 'Your goal race pace for the big day',           offset:   0 },
+    { name: 'Tempo / Threshold',  color: '#f6a623', desc: 'Comfortably hard — roughly 1-hour race pace',   offset: -20 },
+    { name: 'Interval / VO₂max', color: '#b06af3', desc: 'Hard effort — short repeats for speed',         offset: -45 },
+    { name: 'Repetition',         color: '#f05252', desc: 'Very fast — sprint / strides work',             offset: -75 },
   ];
-
   document.getElementById('pace-table').innerHTML = paces.map(p => `
     <div class="pace-row-item">
-      <div class="pace-dot" style="background:${p.color}"></div>
+      <div class="pace-dot" style="background:${p.color};color:${p.color}"></div>
       <div class="pace-name">${p.name}</div>
       <div class="pace-desc">${p.desc}</div>
-      <div class="pace-val" style="color:${p.color}">${fmtPace(paceSec + p.offset)}<span style="color:var(--muted);font-size:0.75rem;font-weight:400">/mi</span></div>
-    </div>
-  `).join('');
+      <div class="pace-val" style="color:${p.color}">${fmtPace(paceSec + p.offset)}<span style="color:var(--muted);font-size:0.72rem;font-weight:500"> /mi</span></div>
+    </div>`).join('');
 }
 
 function buildWeekSchedule(raceType, fitness, totalWeeks) {
-  const cfg  = RACE_CONFIG[raceType];
-  const base = cfg.bases[fitness];
-  const peak = cfg.peaks[fitness];
+  const cfg = RACE_CONFIG[raceType];
+  const base = cfg.bases[fitness], peak = cfg.peaks[fitness];
   const raceMiles = raceType === 'full' ? 26 : 14;
+  const taperWeeks = totalWeeks >= 8 ? 2 : 1, peakWeeks = totalWeeks >= 10 ? 2 : 1;
   const weeks = [];
-
-  const taperWeeks = totalWeeks >= 8 ? 2 : 1;
-  const peakWeeks  = totalWeeks >= 10 ? 2 : 1;
-
   for (let w = 1; w <= totalWeeks; w++) {
     const remaining = totalWeeks - w;
     let miles, phase, badge;
-
-    if (remaining === 0) {
-      miles = raceMiles; phase = 'Race Week!'; badge = 'badge-race';
-    } else if (remaining <= taperWeeks) {
-      const t = remaining === 1 ? 0.65 : 0.45;
-      miles = Math.round(peak * t); phase = 'Taper'; badge = 'badge-taper';
-    } else if (remaining <= taperWeeks + peakWeeks) {
-      miles = remaining === taperWeeks + 1 ? peak : Math.round(peak * 0.85);
-      phase = 'Peak'; badge = 'badge-peak';
-    } else {
+    if (remaining === 0) { miles = raceMiles; phase = 'Race Week!'; badge = 'badge-race'; }
+    else if (remaining <= taperWeeks) { const t = remaining === 1 ? 0.65 : 0.45; miles = Math.round(peak * t); phase = 'Taper'; badge = 'badge-taper'; }
+    else if (remaining <= taperWeeks + peakWeeks) { miles = remaining === taperWeeks + 1 ? peak : Math.round(peak * 0.85); phase = 'Peak'; badge = 'badge-peak'; }
+    else {
       const buildTotal = totalWeeks - 1 - taperWeeks - peakWeeks;
       const progress = buildTotal <= 1 ? 1 : (w - 1) / (buildTotal - 1);
       const isStepback = w > 1 && w % 4 === 0;
@@ -1049,7 +1188,6 @@ function buildWeekSchedule(raceType, fitness, totalWeeks) {
       miles = Math.round(isStepback ? target * 0.8 : target);
       phase = isStepback ? 'Recovery' : 'Build'; badge = 'badge-build';
     }
-
     weeks.push({ w, miles: Math.min(Math.max(miles, base - 4), peak), phase, badge });
   }
   return weeks;
@@ -1059,83 +1197,47 @@ function renderPlan(paceSec, fitness, startDateStr, raceDateVal, totalWeeks) {
   const cfg = RACE_CONFIG[_raceType];
   const weeks = buildWeekSchedule(_raceType, fitness, totalWeeks);
   const maxMiles = Math.max(...weeks.map(x => x.miles));
-
   weeks.forEach(wk => { wk.runs = buildRuns(wk.miles, wk.w, paceSec, fitness, _raceType, totalWeeks); });
-
-  const sd = new Date(startDateStr + 'T00:00:00');
-  const rd = new Date(raceDateVal + 'T00:00:00');
-  document.getElementById('cal-sub').textContent =
-    `${weeks.length * 4}+ events · ${sd.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})} → Race ${rd.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}`;
+  const sd = new Date(startDateStr + 'T00:00:00'), rd = new Date(raceDateVal + 'T00:00:00');
+  document.getElementById('cal-sub').textContent = `${weeks.length * 4}+ events · ${sd.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})} → Race ${rd.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}`;
   document.getElementById('cal-bar').style.display = 'flex';
-
   document.getElementById('plan-info').innerHTML = `
     <div class="plan-info-item"><div class="pi-label">Race</div><div class="pi-val">${cfg.label}</div></div>
     <div class="plan-info-item"><div class="pi-label">Total Weeks</div><div class="pi-val">${totalWeeks} Weeks</div></div>
-    <div class="plan-info-item"><div class="pi-label">Peak Mileage</div><div class="pi-val">${cfg.peaks[fitness]} mi/week</div></div>
-    <div class="plan-info-item"><div class="pi-label">Runs/Week</div><div class="pi-val">${fitness === 'beginner' ? 4 : fitness === 'intermediate' ? 5 : 6}</div></div>
-  `;
-
-  document.getElementById('plan-grid').innerHTML = weeks.map(({ w, miles, phase, badge, runs }) => `
-    <div class="week-card ${phase === 'Peak' ? 'peak' : phase === 'Taper' ? 'taper' : phase === 'Race Week!' ? 'race' : ''}">
-      <div class="week-header">
-        <div class="week-num">Week ${w}</div>
-        <div class="week-badge ${badge}">${phase}</div>
-      </div>
-      <div class="week-miles">${miles} <span>miles total</span></div>
+    <div class="plan-info-item"><div class="pi-label">Peak Mileage</div><div class="pi-val">${cfg.peaks[fitness]} mi/wk</div></div>
+    <div class="plan-info-item"><div class="pi-label">Runs / Week</div><div class="pi-val">${fitness === 'beginner' ? 4 : fitness === 'intermediate' ? 5 : 6}</div></div>`;
+  document.getElementById('plan-grid').innerHTML = weeks.map(({ w, miles, phase, badge, runs }) => {
+    const cardClass = phase === 'Peak' ? 'peak' : phase === 'Taper' ? 'taper' : phase === 'Race Week!' ? 'race' : 'build';
+    return `<div class="week-card ${cardClass}">
+      <div class="week-header"><div class="week-num">Week ${w}</div><div class="week-badge ${badge}">${phase}</div></div>
+      <div class="week-miles">${miles}<span>mi total</span></div>
       <div class="week-runs">${runs}</div>
-      <div class="week-bar-wrap">
-        <div class="week-bar-bg">
-          <div class="week-bar-fill" style="width:${(miles / maxMiles * 100).toFixed(1)}%"></div>
-        </div>
-      </div>
-    </div>
-  `).join('');
+      <div class="week-bar-wrap"><div class="week-bar-bg"><div class="week-bar-fill" style="width:${(miles/maxMiles*100).toFixed(1)}%"></div></div></div>
+    </div>`;
+  }).join('');
 }
 
 function buildRuns(totalMiles, week, paceSec, fitness, raceType, totalWeeks) {
   const cfg = RACE_CONFIG[raceType];
   const runsPerWeek = fitness === 'beginner' ? 4 : fitness === 'intermediate' ? 5 : 6;
-  const isRaceWeek = week === totalWeeks;
-
-  if (isRaceWeek) {
-    return `🏅 Race Day: ${cfg.dist} miles · Rest most of week · Race on Sunday`;
-  }
-
+  if (week === totalWeeks) return `🏅 Race Day: ${cfg.dist} miles · Rest most of week · Race on Sunday`;
   const longRun = Math.min(raceType === 'full' ? 22 : 14, Math.round(totalMiles * 0.3));
   const tempoMiles = week <= 4 ? 3 : week <= 8 ? 5 : 4;
-  const easyTotal = totalMiles - longRun - tempoMiles;
-  const easyCount = runsPerWeek - 2;
-  const easyMilesEach = Math.max(3, Math.round(easyTotal / easyCount));
-
-  const lines = [];
-  lines.push(`🟢 Long run: ${longRun} mi @ easy pace`);
+  const easyMilesEach = Math.max(3, Math.round((totalMiles - longRun - tempoMiles) / (runsPerWeek - 2)));
+  const lines = [`🟢 Long run: ${longRun} mi @ easy pace`];
   if (week >= 3) lines.push(`🟡 Tempo: ${tempoMiles} mi @ threshold`);
   if (runsPerWeek >= 5) lines.push(`🟣 Intervals: 5×800m repeats`);
-  for (let i = 0; i < easyCount; i++) lines.push(`🔵 Easy run: ${easyMilesEach} mi`);
+  for (let i = 0; i < runsPerWeek - 2; i++) lines.push(`🔵 Easy run: ${easyMilesEach} mi`);
   return lines.slice(0, runsPerWeek).join('<br>');
 }
 
-function icsDate(date, hour) {
-  const d = new Date(date);
-  d.setHours(hour, 0, 0, 0);
-  return d.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
-}
+function icsDate(date, hour) { const d = new Date(date); d.setHours(hour,0,0,0); return d.toISOString().replace(/[-:]/g,'').replace(/\.\d{3}/,''); }
 
 function icsEvent(uid, summary, description, date, durationHours) {
-  const start = icsDate(date, 7);
-  const endDate = new Date(date);
+  const start = icsDate(date, 7), endDate = new Date(date);
   endDate.setHours(7 + durationHours, 0, 0, 0);
-  const end = endDate.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
-  return [
-    'BEGIN:VEVENT',
-    `UID:${uid}@stride-training`,
-    `DTSTAMP:${icsDate(new Date(), 0)}`,
-    `DTSTART:${start}`,
-    `DTEND:${end}`,
-    `SUMMARY:${summary}`,
-    `DESCRIPTION:${description}`,
-    'END:VEVENT'
-  ].join('\r\n');
+  const end = endDate.toISOString().replace(/[-:]/g,'').replace(/\.\d{3}/,'');
+  return ['BEGIN:VEVENT',`UID:${uid}@stride-training`,`DTSTAMP:${icsDate(new Date(),0)}`,`DTSTART:${start}`,`DTEND:${end}`,`SUMMARY:${summary}`,`DESCRIPTION:${description}`,'END:VEVENT'].join('\r\n');
 }
 
 function downloadICS(provider) {
@@ -1143,80 +1245,48 @@ function downloadICS(provider) {
   const { paceSec, fitness, startDateStr, raceDateVal, raceType, totalWeeks } = _planData;
   const cfg = RACE_CONFIG[raceType];
   const runsPerWeek = fitness === 'beginner' ? 4 : fitness === 'intermediate' ? 5 : 6;
-  const dayOffsets = { 4: [0, 2, 4, 6], 5: [0, 1, 3, 5, 6], 6: [0, 1, 2, 4, 5, 6] };
+  const dayOffsets = { 4: [0,2,4,6], 5: [0,1,3,5,6], 6: [0,1,2,4,5,6] };
   const offsets = dayOffsets[runsPerWeek];
   const weeks = buildWeekSchedule(raceType, fitness, totalWeeks);
-
   const origin = new Date(startDateStr + 'T00:00:00');
   const dow = origin.getDay();
-  const toMon = dow === 0 ? 1 : dow === 1 ? 0 : 8 - dow;
-  origin.setDate(origin.getDate() + toMon);
-
+  origin.setDate(origin.getDate() + (dow === 0 ? 1 : dow === 1 ? 0 : 8 - dow));
   const events = [];
-
   weeks.forEach(({ w, miles }) => {
     const weekStart = new Date(origin);
     weekStart.setDate(origin.getDate() + (w - 1) * 7);
-    const isRaceWeek = w === totalWeeks;
-
-    if (isRaceWeek) {
+    if (w === totalWeeks) {
       const raceDay = new Date(weekStart);
       raceDay.setDate(weekStart.getDate() + 6);
-      events.push(icsEvent(`w${w}-race`, `🏅 Race Day — ${cfg.label}!`,
-        `${cfg.dist} miles. You trained for this. Target pace: ${fmtPace(paceSec)}/mile. Good luck!`,
-        raceDay, raceType === 'full' ? 5 : 3));
+      events.push(icsEvent(`w${w}-race`, `🏅 Race Day — ${cfg.label}!`, `${cfg.dist} miles. Target pace: ${fmtPace(paceSec)}/mile. Good luck!`, raceDay, raceType === 'full' ? 5 : 3));
       return;
     }
-
     const longRun = Math.min(raceType === 'full' ? 22 : 14, Math.round(miles * 0.3));
     const tempoMiles = w <= 4 ? 3 : w <= 8 ? 5 : 4;
     const easyMiles = Math.max(3, Math.round((miles - longRun - tempoMiles) / (runsPerWeek - 2)));
-
     const runTypes = [
-      { name: `🔵 Easy Run — ${easyMiles} mi`, desc: `Easy pace ${fmtPace(paceSec + 90)}/mi. Keep it conversational.`, dur: Math.ceil(easyMiles * paceSec / 3600) + 1 },
-      { name: w >= 3 ? `🟡 Tempo — ${tempoMiles} mi` : `🔵 Easy Run — ${easyMiles} mi`, desc: w >= 3 ? `Threshold pace ${fmtPace(paceSec - 20)}/mi. Comfortably hard.` : `Easy pace ${fmtPace(paceSec + 90)}/mi.`, dur: 1 },
-      runsPerWeek >= 5 ? { name: '🟣 Intervals — 5×800m', desc: `Interval pace ${fmtPace(paceSec - 45)}/mi. Warm up 1 mi, 5×800m, cool down 1 mi.`, dur: 1 } : null,
-      { name: `🔵 Easy Run — ${easyMiles} mi`, desc: `Easy pace ${fmtPace(paceSec + 90)}/mi.`, dur: Math.ceil(easyMiles * paceSec / 3600) + 1 },
-      runsPerWeek >= 6 ? { name: `🔵 Easy Run — ${easyMiles} mi`, desc: `Easy pace ${fmtPace(paceSec + 90)}/mi.`, dur: Math.ceil(easyMiles * paceSec / 3600) + 1 } : null,
-      { name: `🟢 Long Run — ${longRun} mi`, desc: `Long run pace ${fmtPace(paceSec + 60)}/mi. Build aerobic base. Hydrate well.`, dur: Math.ceil(longRun * (paceSec + 60) / 3600) + 1 },
+      { name: `🔵 Easy Run — ${easyMiles} mi`, desc: `Easy pace ${fmtPace(paceSec+90)}/mi.`, dur: Math.ceil(easyMiles*paceSec/3600)+1 },
+      { name: w>=3 ? `🟡 Tempo — ${tempoMiles} mi` : `🔵 Easy Run — ${easyMiles} mi`, desc: w>=3 ? `Threshold pace ${fmtPace(paceSec-20)}/mi.` : `Easy pace ${fmtPace(paceSec+90)}/mi.`, dur: 1 },
+      runsPerWeek>=5 ? { name: '🟣 Intervals — 5×800m', desc: `Interval pace ${fmtPace(paceSec-45)}/mi.`, dur: 1 } : null,
+      { name: `🔵 Easy Run — ${easyMiles} mi`, desc: `Easy pace ${fmtPace(paceSec+90)}/mi.`, dur: Math.ceil(easyMiles*paceSec/3600)+1 },
+      runsPerWeek>=6 ? { name: `🔵 Easy Run — ${easyMiles} mi`, desc: `Easy pace ${fmtPace(paceSec+90)}/mi.`, dur: Math.ceil(easyMiles*paceSec/3600)+1 } : null,
+      { name: `🟢 Long Run — ${longRun} mi`, desc: `Long run pace ${fmtPace(paceSec+60)}/mi.`, dur: Math.ceil(longRun*(paceSec+60)/3600)+1 },
     ].filter(Boolean).slice(0, runsPerWeek);
-
     offsets.slice(0, runsPerWeek).forEach((dayOff, i) => {
       const runDay = new Date(weekStart);
       runDay.setDate(weekStart.getDate() + dayOff);
-      const run = runTypes[i];
-      events.push(icsEvent(`w${w}-d${dayOff}`, `Week ${w}: ${run.name}`, run.desc, runDay, run.dur));
+      events.push(icsEvent(`w${w}-d${dayOff}`, `Week ${w}: ${runTypes[i].name}`, runTypes[i].desc, runDay, runTypes[i].dur));
     });
   });
-
-  const ics = [
-    'BEGIN:VCALENDAR',
-    'VERSION:2.0',
-    'PRODID:-//Stride//Training Planner//EN',
-    'CALSCALE:GREGORIAN',
-    'METHOD:PUBLISH',
-    `X-WR-CALNAME:Stride ${cfg.label} Training`,
-    `X-WR-CALDESC:Your ${totalWeeks}-week ${cfg.label} training plan from Stride`,
-    ...events,
-    'END:VCALENDAR'
-  ].join('\r\n');
-
+  const ics = ['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Stride//Training Planner//EN','CALSCALE:GREGORIAN','METHOD:PUBLISH',`X-WR-CALNAME:Stride ${cfg.label} Training`,`X-WR-CALDESC:Your ${totalWeeks}-week ${cfg.label} training plan`,...events,'END:VCALENDAR'].join('\r\n');
   const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
-  a.href = url;
-  a.download = `stride-${raceType}-plan.ics`;
-  a.click();
+  a.href = url; a.download = `stride-${raceType}-plan.ics`; a.click();
   URL.revokeObjectURL(url);
-
-  if (provider === 'google') {
-    showToast('📥 Downloaded! Go to calendar.google.com → Settings → Import');
-  } else {
-    showToast('📅 Opening in Apple Calendar…');
-  }
+  showToast(provider === 'google' ? '📥 Downloaded! Go to calendar.google.com → Settings → Import' : '📅 Opening in Apple Calendar…');
 }
 
-// Init
 checkAuth();
 </script>
 </body>
