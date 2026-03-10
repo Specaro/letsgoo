@@ -8,27 +8,27 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --orange: #e8540a;
-      --orange-light: #ff7b39;
-      --orange-dim: rgba(232,84,10,0.12);
-      --dark: #0b0d14;
-      --card: #13161f;
-      --card2: #1c2030;
-      --card3: #242840;
-      --border: #272b3d;
-      --border-bright: #3a3f58;
-      --text: #eaedf5;
-      --muted: #7a80a0;
-      --green: #22d47a;
-      --blue: #4f8ef7;
-      --purple: #b06af3;
-      --red: #f05252;
-      --yellow: #f6a623;
+      --orange: #f97316;
+      --orange-light: #fb923c;
+      --orange-dim: rgba(249,115,22,0.1);
+      --bg: #f1f5f9;
+      --surface: #ffffff;
+      --surface2: #f8fafc;
+      --surface3: #f1f5f9;
+      --border: #e2e8f0;
+      --border-bright: #cbd5e1;
+      --text: #1e293b;
+      --muted: #64748b;
+      --green: #10b981;
+      --blue: #3b82f6;
+      --purple: #8b5cf6;
+      --red: #ef4444;
+      --yellow: #f59e0b;
     }
 
     body {
       font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-      background: var(--dark);
+      background: var(--bg);
       color: var(--text);
       min-height: 100vh;
     }
@@ -37,7 +37,7 @@
     #auth-overlay {
       position: fixed;
       inset: 0;
-      background: radial-gradient(ellipse at 60% 30%, rgba(232,84,10,0.07) 0%, transparent 60%), var(--dark);
+      background: linear-gradient(135deg, #fff7ed 0%, #fef9f0 45%, #f0fdf4 100%);
       z-index: 9999;
       display: flex;
       align-items: center;
@@ -45,14 +45,14 @@
       padding: 1.5rem;
     }
     .auth-box {
-      background: var(--card);
-      border: 1px solid var(--border-bright);
+      background: var(--surface);
+      border: 1px solid var(--border);
       border-radius: 24px;
       padding: 2.75rem 2.25rem;
       width: 100%;
       max-width: 420px;
       text-align: center;
-      box-shadow: 0 32px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.03) inset;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.1), 0 4px 20px rgba(249,115,22,0.07);
     }
     .auth-logo {
       display: flex;
@@ -61,16 +61,16 @@
       gap: 0.8rem;
       margin-bottom: 1.75rem;
     }
-    .auth-logo h1 { font-size: 2rem; font-weight: 800; letter-spacing: -0.02em; }
+    .auth-logo h1 { font-size: 2rem; font-weight: 800; letter-spacing: -0.02em; color: var(--text); }
     .auth-logo h1 span { color: var(--orange); }
-    .auth-box h2 { font-size: 1.25rem; font-weight: 700; margin-bottom: 0.45rem; }
+    .auth-box h2 { font-size: 1.25rem; font-weight: 700; margin-bottom: 0.45rem; color: var(--text); }
     .auth-box p { font-size: 0.875rem; color: var(--muted); margin-bottom: 2rem; line-height: 1.5; }
 
     .btn-google {
       width: 100%;
-      background: #fff;
-      color: #1f1f1f;
-      border: none;
+      background: var(--surface);
+      color: var(--text);
+      border: 1.5px solid var(--border);
       border-radius: 12px;
       padding: 0.8rem 1.25rem;
       font-size: 0.95rem;
@@ -80,11 +80,11 @@
       align-items: center;
       justify-content: center;
       gap: 0.65rem;
-      transition: opacity 0.2s, transform 0.1s;
+      transition: border-color 0.2s, box-shadow 0.2s, transform 0.1s;
       margin-bottom: 1.25rem;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
     }
-    .btn-google:hover { opacity: 0.92; transform: translateY(-1px); }
+    .btn-google:hover { border-color: var(--border-bright); box-shadow: 0 4px 12px rgba(0,0,0,0.1); transform: translateY(-1px); }
     .btn-google:active { transform: scale(0.98); }
 
     .auth-divider {
@@ -108,15 +108,15 @@
     .auth-field label { display: block; font-size: 0.75rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.45rem; }
     .auth-field input {
       width: 100%;
-      background: var(--card2);
-      border: 1px solid var(--border);
+      background: var(--surface2);
+      border: 1.5px solid var(--border);
       border-radius: 10px;
       padding: 0.7rem 0.95rem;
       color: var(--text);
       font-size: 0.95rem;
       transition: border-color 0.2s, box-shadow 0.2s;
     }
-    .auth-field input:focus { outline: none; border-color: var(--orange); box-shadow: 0 0 0 3px rgba(232,84,10,0.15); }
+    .auth-field input:focus { outline: none; border-color: var(--orange); box-shadow: 0 0 0 3px rgba(249,115,22,0.12); background: var(--surface); }
 
     .btn-signin {
       width: 100%;
@@ -129,17 +129,18 @@
       font-weight: 700;
       cursor: pointer;
       margin-top: 0.25rem;
-      transition: opacity 0.2s, transform 0.1s;
-      box-shadow: 0 4px 16px rgba(232,84,10,0.35);
+      transition: opacity 0.2s, transform 0.1s, box-shadow 0.2s;
+      box-shadow: 0 4px 16px rgba(249,115,22,0.3);
       letter-spacing: 0.02em;
     }
-    .btn-signin:hover { opacity: 0.92; transform: translateY(-1px); }
+    .btn-signin:hover { opacity: 0.92; transform: translateY(-1px); box-shadow: 0 8px 24px rgba(249,115,22,0.35); }
     .btn-signin:active { transform: scale(0.98); }
 
     .auth-footer { font-size: 0.82rem; color: var(--muted); margin-top: 1.5rem; }
     .auth-footer a { color: var(--orange); text-decoration: none; cursor: pointer; font-weight: 600; }
+    .auth-footer a:hover { text-decoration: underline; }
 
-    .auth-error { color: #f87171; font-size: 0.82rem; margin-top: 0.75rem; display: none; padding: 0.6rem 0.9rem; background: rgba(248,113,113,0.1); border-radius: 8px; border: 1px solid rgba(248,113,113,0.2); }
+    .auth-error { color: #dc2626; font-size: 0.82rem; margin-top: 0.75rem; display: none; padding: 0.6rem 0.9rem; background: rgba(239,68,68,0.06); border-radius: 8px; border: 1px solid rgba(239,68,68,0.15); }
 
     .forgot-link {
       display: block;
@@ -161,13 +162,13 @@
     }
     .reset-success .check-icon {
       width: 52px; height: 52px;
-      background: rgba(34,212,122,0.12);
-      border: 1px solid rgba(34,212,122,0.3);
+      background: rgba(16,185,129,0.1);
+      border: 1px solid rgba(16,185,129,0.3);
       border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
       color: var(--green);
     }
-    .reset-success h3 { font-size: 1.05rem; font-weight: 700; }
+    .reset-success h3 { font-size: 1.05rem; font-weight: 700; color: var(--text); }
     .reset-success p { font-size: 0.82rem; color: var(--muted); line-height: 1.6; max-width: 280px; }
     .reset-success .email-highlight { color: var(--text); font-weight: 600; }
 
@@ -189,19 +190,19 @@
 
     /* ── Header ── */
     header {
-      background: linear-gradient(180deg, #0f1220 0%, var(--dark) 100%);
+      background: var(--surface);
       border-bottom: 1px solid var(--border);
-      padding: 1.25rem 2rem;
+      padding: 1rem 2rem;
       display: flex;
       align-items: center;
       gap: 1rem;
       position: sticky;
       top: 0;
       z-index: 100;
-      backdrop-filter: blur(12px);
+      box-shadow: 0 1px 8px rgba(0,0,0,0.06);
     }
     .logo svg { display: block; }
-    header h1 { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.02em; }
+    header h1 { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.02em; color: var(--text); }
     header h1 span { color: var(--orange); }
     header p { color: var(--muted); font-size: 0.8rem; margin-top: 0.15rem; }
 
@@ -215,7 +216,7 @@
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      background: var(--card2);
+      background: var(--surface2);
       border: 1px solid var(--border);
       border-radius: 20px;
       padding: 0.3rem 0.75rem 0.3rem 0.3rem;
@@ -233,10 +234,10 @@
       color: #fff;
       flex-shrink: 0;
     }
-    .user-name { font-size: 0.82rem; font-weight: 600; }
+    .user-name { font-size: 0.82rem; font-weight: 600; color: var(--text); }
     .btn-signout {
       background: transparent;
-      border: 1px solid var(--border);
+      border: 1.5px solid var(--border);
       border-radius: 8px;
       padding: 0.35rem 0.75rem;
       font-size: 0.78rem;
@@ -244,44 +245,55 @@
       cursor: pointer;
       transition: border-color 0.2s, color 0.2s, background 0.2s;
     }
-    .btn-signout:hover { border-color: var(--red); color: var(--red); background: rgba(240,82,82,0.07); }
+    .btn-signout:hover { border-color: var(--red); color: var(--red); background: rgba(239,68,68,0.05); }
 
     /* ── Hero Banner ── */
     .hero-banner {
-      background: linear-gradient(135deg, rgba(232,84,10,0.15) 0%, rgba(79,142,247,0.06) 60%, transparent 100%);
+      background: linear-gradient(135deg, #fff7ed 0%, #fef9f0 50%, #f0fdf4 100%);
       border-bottom: 1px solid var(--border);
-      padding: 2.5rem 2rem;
+      padding: 3rem 2rem;
       text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-banner::before {
+      content: '';
+      position: absolute;
+      top: -50px; right: -50px;
+      width: 180px; height: 180px;
+      background: radial-gradient(circle, rgba(249,115,22,0.12) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+    .hero-banner::after {
+      content: '';
+      position: absolute;
+      bottom: -40px; left: -40px;
+      width: 160px; height: 160px;
+      background: radial-gradient(circle, rgba(16,185,129,0.1) 0%, transparent 70%);
+      border-radius: 50%;
     }
     .hero-banner h2 {
-      font-size: 2rem;
+      font-size: 2.2rem;
       font-weight: 800;
       letter-spacing: -0.03em;
-      margin-bottom: 0.5rem;
-      background: linear-gradient(135deg, #fff 0%, #c0c8e0 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      margin-bottom: 0.6rem;
+      color: var(--text);
+      position: relative;
     }
-    .hero-banner h2 span {
-      background: linear-gradient(135deg, var(--orange) 0%, var(--orange-light) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    .hero-banner p { color: var(--muted); font-size: 0.95rem; max-width: 480px; margin: 0 auto; line-height: 1.6; }
+    .hero-banner h2 span { color: var(--orange); }
+    .hero-banner p { color: var(--muted); font-size: 1rem; max-width: 480px; margin: 0 auto; line-height: 1.6; position: relative; }
 
     /* ── Layout ── */
     .container { max-width: 1120px; margin: 0 auto; padding: 2.5rem 1.5rem; }
 
     /* ── Form Card ── */
     .form-card {
-      background: var(--card);
+      background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 20px;
       padding: 2.25rem;
       margin-bottom: 2rem;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.3);
+      box-shadow: 0 2px 16px rgba(0,0,0,0.06);
     }
     .form-card-title {
       display: flex;
@@ -292,7 +304,7 @@
     .form-card-title .icon-badge {
       width: 34px; height: 34px;
       background: var(--orange-dim);
-      border: 1px solid rgba(232,84,10,0.25);
+      border: 1px solid rgba(249,115,22,0.2);
       border-radius: 9px;
       display: flex; align-items: center; justify-content: center;
       color: var(--orange);
@@ -303,10 +315,10 @@
     .race-toggle {
       display: flex;
       gap: 0;
-      border: 1px solid var(--border);
+      border: 1.5px solid var(--border);
       border-radius: 12px;
       overflow: hidden;
-      background: var(--card2);
+      background: var(--surface2);
     }
     .race-toggle-btn {
       flex: 1;
@@ -320,11 +332,11 @@
       transition: all 0.2s;
       white-space: nowrap;
     }
-    .race-toggle-btn + .race-toggle-btn { border-left: 1px solid var(--border); }
+    .race-toggle-btn + .race-toggle-btn { border-left: 1.5px solid var(--border); }
     .race-toggle-btn.active {
       background: linear-gradient(135deg, var(--orange) 0%, var(--orange-light) 100%);
       color: #fff;
-      box-shadow: 0 2px 10px rgba(232,84,10,0.3);
+      box-shadow: 0 2px 8px rgba(249,115,22,0.25);
     }
 
     .form-grid {
@@ -345,8 +357,8 @@
     .field label .opt { font-weight: 400; text-transform: none; font-size: 0.7rem; opacity: 0.7; }
     .field input, .field select {
       width: 100%;
-      background: var(--card2);
-      border: 1px solid var(--border);
+      background: var(--surface2);
+      border: 1.5px solid var(--border);
       border-radius: 10px;
       padding: 0.7rem 0.95rem;
       color: var(--text);
@@ -356,9 +368,10 @@
     .field input:focus, .field select:focus {
       outline: none;
       border-color: var(--orange);
-      box-shadow: 0 0 0 3px rgba(232,84,10,0.12);
+      box-shadow: 0 0 0 3px rgba(249,115,22,0.1);
+      background: var(--surface);
     }
-    .field select option { background: var(--card2); }
+    .field select option { background: var(--surface); color: var(--text); }
 
     .split-row { display: flex; gap: 0.5rem; align-items: center; }
     .split-row input { text-align: center; }
@@ -386,15 +399,15 @@
       cursor: pointer;
       letter-spacing: 0.02em;
       transition: opacity 0.2s, transform 0.1s, box-shadow 0.2s;
-      box-shadow: 0 4px 20px rgba(232,84,10,0.4);
+      box-shadow: 0 4px 16px rgba(249,115,22,0.3);
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
     }
-    .btn-generate:hover { opacity: 0.9; transform: translateY(-2px); box-shadow: 0 8px 28px rgba(232,84,10,0.45); }
+    .btn-generate:hover { opacity: 0.9; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(249,115,22,0.35); }
     .btn-generate:active { transform: scale(0.97); }
 
-    .error-msg { color: #f87171; font-size: 0.85rem; margin-top: 1rem; display: none; padding: 0.7rem 1rem; background: rgba(248,113,113,0.08); border-radius: 10px; border: 1px solid rgba(248,113,113,0.2); }
+    .error-msg { color: #dc2626; font-size: 0.85rem; margin-top: 1rem; display: none; padding: 0.7rem 1rem; background: rgba(239,68,68,0.06); border-radius: 10px; border: 1px solid rgba(239,68,68,0.15); }
 
     #results { display: none; }
 
@@ -405,7 +418,7 @@
       margin-bottom: 1.5rem;
       flex-wrap: wrap;
     }
-    .results-header h2 { font-size: 1.4rem; font-weight: 800; letter-spacing: -0.02em; }
+    .results-header h2 { font-size: 1.4rem; font-weight: 800; letter-spacing: -0.02em; color: var(--text); }
     .badge {
       background: linear-gradient(135deg, var(--orange), var(--orange-light));
       color: #fff;
@@ -421,11 +434,12 @@
       display: flex;
       gap: 0.25rem;
       margin-bottom: 1.75rem;
-      background: var(--card2);
-      border: 1px solid var(--border);
+      background: var(--surface);
+      border: 1.5px solid var(--border);
       border-radius: 14px;
       padding: 0.35rem;
       width: fit-content;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
     }
     .tab {
       background: transparent;
@@ -439,12 +453,11 @@
       transition: all 0.2s;
       white-space: nowrap;
     }
-    .tab:hover { color: var(--text); }
+    .tab:hover { color: var(--text); background: var(--surface2); }
     .tab.active {
-      background: var(--card);
-      color: var(--text);
-      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-      border: 1px solid var(--border-bright);
+      background: var(--orange);
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(249,115,22,0.25);
     }
 
     .tab-panel { display: none; }
@@ -458,14 +471,15 @@
       margin-bottom: 1.75rem;
     }
     .stat-card {
-      background: var(--card);
+      background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 16px;
       padding: 1.5rem 1.25rem;
       text-align: center;
       position: relative;
       overflow: hidden;
-      transition: border-color 0.2s, transform 0.2s;
+      transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.05);
     }
     .stat-card::before {
       content: '';
@@ -474,7 +488,7 @@
       height: 3px;
       background: linear-gradient(90deg, var(--orange), var(--orange-light));
     }
-    .stat-card:hover { border-color: var(--border-bright); transform: translateY(-2px); }
+    .stat-card:hover { border-color: var(--border-bright); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.08); }
     .stat-card .label { font-size: 0.7rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 0.5rem; font-weight: 700; }
     .stat-card .value { font-size: 1.8rem; font-weight: 800; color: var(--orange); letter-spacing: -0.02em; line-height: 1; }
     .stat-card .unit { font-size: 0.72rem; color: var(--muted); margin-top: 0.4rem; }
@@ -495,10 +509,11 @@
 
     /* ── Pace Table ── */
     .pace-table {
-      background: var(--card);
+      background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 16px;
       overflow: hidden;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.05);
     }
     .pace-row-item {
       display: flex;
@@ -509,15 +524,15 @@
       transition: background 0.15s;
     }
     .pace-row-item:last-child { border-bottom: none; }
-    .pace-row-item:hover { background: var(--card2); }
-    .pace-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; box-shadow: 0 0 6px currentColor; }
-    .pace-name { flex: 1; font-weight: 700; font-size: 0.9rem; }
+    .pace-row-item:hover { background: var(--surface2); }
+    .pace-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+    .pace-name { flex: 1; font-weight: 700; font-size: 0.9rem; color: var(--text); }
     .pace-desc { flex: 2; font-size: 0.8rem; color: var(--muted); }
     .pace-val { font-size: 1.1rem; font-weight: 800; white-space: nowrap; letter-spacing: -0.01em; }
 
     /* ── Plan ── */
     .plan-info {
-      background: var(--card);
+      background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 16px;
       padding: 1.25rem 1.5rem;
@@ -525,6 +540,7 @@
       display: flex;
       gap: 2.5rem;
       flex-wrap: wrap;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.05);
     }
     .plan-info-item .pi-label { font-size: 0.7rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; font-weight: 700; margin-bottom: 0.25rem; }
     .plan-info-item .pi-val { font-size: 1.05rem; font-weight: 700; color: var(--text); }
@@ -535,28 +551,29 @@
       gap: 0.875rem;
     }
     .week-card {
-      background: var(--card);
-      border: 1px solid var(--border);
+      background: var(--surface);
+      border: 1.5px solid var(--border);
       border-radius: 16px;
       padding: 1.25rem;
       transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
       position: relative;
       overflow: hidden;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.04);
     }
     .week-card::after {
       content: '';
       position: absolute;
       top: 0; left: 0; right: 0;
-      height: 2px;
+      height: 3px;
       background: var(--border);
       transition: background 0.2s;
     }
-    .week-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.25); }
-    .week-card.peak { border-color: rgba(232,84,10,0.35); }
+    .week-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
+    .week-card.peak { border-color: rgba(249,115,22,0.3); }
     .week-card.peak::after { background: linear-gradient(90deg, var(--orange), var(--orange-light)); }
-    .week-card.taper { border-color: rgba(79,142,247,0.3); }
+    .week-card.taper { border-color: rgba(59,130,246,0.3); }
     .week-card.taper::after { background: var(--blue); }
-    .week-card.race { border-color: rgba(34,212,122,0.35); }
+    .week-card.race { border-color: rgba(16,185,129,0.3); }
     .week-card.race::after { background: var(--green); }
     .week-card.build::after { background: var(--border-bright); }
     .week-header {
@@ -574,23 +591,23 @@
       text-transform: uppercase;
       letter-spacing: 0.06em;
     }
-    .badge-build { background: rgba(79,142,247,0.12); color: var(--blue); border: 1px solid rgba(79,142,247,0.2); }
-    .badge-peak { background: rgba(232,84,10,0.12); color: var(--orange); border: 1px solid rgba(232,84,10,0.25); }
-    .badge-taper { background: rgba(79,142,247,0.12); color: var(--blue); border: 1px solid rgba(79,142,247,0.2); }
-    .badge-race { background: rgba(34,212,122,0.12); color: var(--green); border: 1px solid rgba(34,212,122,0.25); }
+    .badge-build { background: rgba(59,130,246,0.08); color: var(--blue); border: 1px solid rgba(59,130,246,0.2); }
+    .badge-peak { background: rgba(249,115,22,0.08); color: var(--orange); border: 1px solid rgba(249,115,22,0.2); }
+    .badge-taper { background: rgba(59,130,246,0.08); color: var(--blue); border: 1px solid rgba(59,130,246,0.2); }
+    .badge-race { background: rgba(16,185,129,0.08); color: var(--green); border: 1px solid rgba(16,185,129,0.2); }
 
     .week-miles { font-size: 1.6rem; font-weight: 800; color: var(--text); letter-spacing: -0.03em; line-height: 1; }
     .week-miles span { font-size: 0.8rem; color: var(--muted); font-weight: 500; margin-left: 0.25rem; }
     .week-runs { margin-top: 0.625rem; font-size: 0.78rem; color: var(--muted); line-height: 1.7; }
 
     .week-bar-wrap { margin-top: 1rem; }
-    .week-bar-bg { background: var(--card2); border-radius: 4px; height: 3px; }
+    .week-bar-bg { background: var(--surface3); border-radius: 4px; height: 4px; }
     .week-bar-fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg, var(--orange), var(--orange-light)); transition: width 0.6s cubic-bezier(0.4,0,0.2,1); }
 
     /* ── Calendar Bar ── */
     .cal-bar {
-      background: linear-gradient(135deg, var(--card) 0%, var(--card2) 100%);
-      border: 1px solid var(--border-bright);
+      background: linear-gradient(135deg, #fff7ed 0%, #fef3c7 100%);
+      border: 1.5px solid rgba(249,115,22,0.2);
       border-radius: 16px;
       padding: 1.25rem 1.5rem;
       margin-bottom: 1.25rem;
@@ -600,13 +617,13 @@
       flex-wrap: wrap;
       gap: 1rem;
     }
-    .cal-bar-text .cal-title { font-weight: 700; font-size: 0.95rem; }
+    .cal-bar-text .cal-title { font-weight: 700; font-size: 0.95rem; color: var(--text); }
     .cal-bar-text .cal-sub { font-size: 0.8rem; color: var(--muted); margin-top: 0.2rem; }
 
     .cal-dropdown-wrap { position: relative; }
     .btn-cal {
-      background: #fff;
-      color: #1a1d27;
+      background: var(--orange);
+      color: #fff;
       border: none;
       border-radius: 10px;
       padding: 0.65rem 1.35rem;
@@ -618,9 +635,9 @@
       gap: 0.5rem;
       transition: opacity 0.2s, transform 0.1s, box-shadow 0.2s;
       white-space: nowrap;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+      box-shadow: 0 2px 8px rgba(249,115,22,0.3);
     }
-    .btn-cal:hover { opacity: 0.92; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(0,0,0,0.3); }
+    .btn-cal:hover { opacity: 0.9; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(249,115,22,0.35); }
     .btn-cal:active { transform: scale(0.97); }
 
     .cal-menu {
@@ -628,12 +645,12 @@
       position: absolute;
       right: 0;
       top: calc(100% + 8px);
-      background: var(--card);
-      border: 1px solid var(--border-bright);
+      background: var(--surface);
+      border: 1.5px solid var(--border);
       border-radius: 14px;
       overflow: hidden;
       min-width: 210px;
-      box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.12);
       z-index: 100;
     }
     .cal-menu.open { display: block; }
@@ -647,9 +664,9 @@
       border-bottom: 1px solid var(--border);
     }
     .cal-menu-item:last-child { border-bottom: none; }
-    .cal-menu-item:hover { background: var(--card2); }
+    .cal-menu-item:hover { background: var(--surface2); }
     .cal-menu-item .cal-icon { font-size: 1.2rem; flex-shrink: 0; }
-    .cal-menu-item .cal-label { font-size: 0.875rem; font-weight: 700; }
+    .cal-menu-item .cal-label { font-size: 0.875rem; font-weight: 700; color: var(--text); }
     .cal-menu-item .cal-hint { font-size: 0.7rem; color: var(--muted); margin-top: 0.1rem; }
 
     /* ── Toast ── */
@@ -658,13 +675,13 @@
       bottom: 1.75rem;
       left: 50%;
       transform: translateX(-50%) translateY(120px);
-      background: var(--card);
-      border: 1px solid var(--border-bright);
+      background: var(--text);
+      color: #fff;
       border-radius: 12px;
       padding: 0.8rem 1.5rem;
       font-size: 0.875rem;
       font-weight: 600;
-      box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.15);
       transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1);
       z-index: 1000;
       white-space: nowrap;
@@ -953,6 +970,15 @@
 </div>
 
 <script>
+let _authMode = 'signin';
+
+async function hashPassword(pw) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(pw + 'stride_v1'));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+function getUsers() { return JSON.parse(localStorage.getItem('stride_users') || '[]'); }
+function saveUsers(u) { localStorage.setItem('stride_users', JSON.stringify(u)); }
+
 function checkAuth() {
   const user = localStorage.getItem('stride_user');
   if (user) showApp(JSON.parse(user));
@@ -964,27 +990,73 @@ function signInWithGoogle() {
   completeSignIn(name, 'user@gmail.com', 'google');
 }
 
-function signInWithEmail() {
-  const email = document.getElementById('auth-email').value.trim();
+async function signInWithEmail() {
+  if (_authMode === 'signup') { signUpWithEmail(); return; }
+  const email = document.getElementById('auth-email').value.trim().toLowerCase();
   const password = document.getElementById('auth-password').value;
   const errEl = document.getElementById('auth-error');
-  if (!email || !password) { errEl.textContent = 'Please enter your email and password.'; errEl.style.display = 'block'; return; }
-  if (!email.includes('@')) { errEl.textContent = 'Please enter a valid email address.'; errEl.style.display = 'block'; return; }
+  if (!email || !password) {
+    errEl.textContent = 'Please enter your email and password.';
+    errEl.style.display = 'block'; return;
+  }
+  const users = getUsers();
+  const match = users.find(u => u.email === email);
+  if (!match) {
+    errEl.textContent = 'No account found with that email. Sign up first.';
+    errEl.style.display = 'block'; return;
+  }
+  const hash = await hashPassword(password);
+  if (hash !== match.hash) {
+    errEl.textContent = 'Incorrect password. Please try again.';
+    errEl.style.display = 'block'; return;
+  }
   errEl.style.display = 'none';
+  completeSignIn(match.name, email, 'email');
+}
+
+async function signUpWithEmail() {
+  const email = document.getElementById('auth-email').value.trim().toLowerCase();
+  const password = document.getElementById('auth-password').value;
+  const errEl = document.getElementById('auth-error');
+  if (!email || !password) {
+    errEl.textContent = 'Please enter your email and password.';
+    errEl.style.display = 'block'; return;
+  }
+  if (!email.includes('@') || !email.includes('.')) {
+    errEl.textContent = 'Please enter a valid email address.';
+    errEl.style.display = 'block'; return;
+  }
+  if (password.length < 6) {
+    errEl.textContent = 'Password must be at least 6 characters.';
+    errEl.style.display = 'block'; return;
+  }
+  const users = getUsers();
+  if (users.find(u => u.email === email)) {
+    errEl.textContent = 'An account with this email already exists. Sign in instead.';
+    errEl.style.display = 'block'; return;
+  }
+  const hash = await hashPassword(password);
   const name = email.split('@')[0].replace(/[._-]/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+  users.push({ email, hash, name });
+  saveUsers(users);
+  errEl.style.display = 'none';
   completeSignIn(name, email, 'email');
 }
 
 function signUpFlow() {
-  document.querySelector('.auth-box h2').textContent = 'Create account';
-  document.querySelector('.btn-signin').textContent = 'Create Account';
+  _authMode = 'signup';
+  document.querySelector('.auth-box:not(#reset-view) h2').textContent = 'Create account';
+  document.querySelector('.auth-box:not(#reset-view) .btn-signin').textContent = 'Create Account';
   document.querySelector('.auth-footer').innerHTML = 'Already have an account? <a onclick="signInFlow()">Sign in</a>';
+  document.getElementById('auth-error').style.display = 'none';
 }
 
 function signInFlow() {
-  document.querySelector('.auth-box h2').textContent = 'Welcome back';
-  document.querySelector('.btn-signin').textContent = 'Sign In';
+  _authMode = 'signin';
+  document.querySelector('.auth-box:not(#reset-view) h2').textContent = 'Welcome back';
+  document.querySelector('.auth-box:not(#reset-view) .btn-signin').textContent = 'Sign In';
   document.querySelector('.auth-footer').innerHTML = "Don't have an account? <a onclick=\"signUpFlow()\">Sign up</a>";
+  document.getElementById('auth-error').style.display = 'none';
 }
 
 function authKeydown(e) { if (e.key === 'Enter') signInWithEmail(); }
@@ -1032,6 +1104,7 @@ function showApp(user) {
 
 function signOut() {
   localStorage.removeItem('stride_user');
+  _authMode = 'signin';
   document.getElementById('auth-overlay').style.display = 'flex';
   document.getElementById('results').style.display = 'none';
   document.getElementById('error-msg').style.display = 'none';
@@ -1040,14 +1113,21 @@ function signOut() {
   document.getElementById('auth-error').style.display = 'none';
   document.getElementById('reset-view').style.display = 'none';
   document.querySelector('.auth-box:not(#reset-view)').style.display = 'block';
+  document.querySelector('.auth-box:not(#reset-view) h2').textContent = 'Welcome back';
+  document.querySelector('.auth-box:not(#reset-view) .btn-signin').textContent = 'Sign In';
+  document.querySelector('.auth-footer').innerHTML = "Don't have an account? <a onclick=\"signUpFlow()\">Sign up</a>";
 }
 
 let _raceType = 'half';
 let _planData = null;
 
 const RACE_CONFIG = {
-  half: { dist: 13.1094, weeks: 12, label: 'Half Marathon', bases: { beginner: 15, intermediate: 20, advanced: 28 }, peaks: { beginner: 30, intermediate: 40, advanced: 50 } },
-  full: { dist: 26.2188, weeks: 18, label: 'Marathon', bases: { beginner: 18, intermediate: 25, advanced: 32 }, peaks: { beginner: 40, intermediate: 50, advanced: 60 } },
+  half: { dist: 13.1094, weeks: 12, label: 'Half Marathon',
+          bases: { beginner: 15, intermediate: 20, advanced: 28 },
+          peaks: { beginner: 30, intermediate: 40, advanced: 50 } },
+  full: { dist: 26.2188, weeks: 18, label: 'Marathon',
+          bases: { beginner: 18, intermediate: 25, advanced: 32 },
+          peaks: { beginner: 40, intermediate: 50, advanced: 60 } },
 };
 
 function setRaceType(type) {
@@ -1152,16 +1232,16 @@ function renderPace(paceSec, weight, heightInches, gender) {
     <div class="stat-card"><div class="label">Est. VO₂max</div><div class="value">${vo2max}</div><div class="unit">mL / kg / min</div></div>
     ${bmiCard}`;
   const paces = [
-    { name: 'Easy / Recovery',    color: '#22d47a', desc: 'Conversational — the bulk of your training',    offset:  90 },
-    { name: 'Long Run',           color: '#4f8ef7', desc: 'Slightly slower than easy, for your weekly LR', offset:  60 },
-    { name: `${cfg.label} Race`,  color: '#e8540a', desc: 'Your goal race pace for the big day',           offset:   0 },
-    { name: 'Tempo / Threshold',  color: '#f6a623', desc: 'Comfortably hard — roughly 1-hour race pace',   offset: -20 },
-    { name: 'Interval / VO₂max', color: '#b06af3', desc: 'Hard effort — short repeats for speed',         offset: -45 },
-    { name: 'Repetition',         color: '#f05252', desc: 'Very fast — sprint / strides work',             offset: -75 },
+    { name: 'Easy / Recovery',    color: '#10b981', desc: 'Conversational — the bulk of your training',    offset:  90 },
+    { name: 'Long Run',           color: '#3b82f6', desc: 'Slightly slower than easy, for your weekly LR', offset:  60 },
+    { name: `${cfg.label} Race`,  color: '#f97316', desc: 'Your goal race pace for the big day',           offset:   0 },
+    { name: 'Tempo / Threshold',  color: '#f59e0b', desc: 'Comfortably hard — roughly 1-hour race pace',   offset: -20 },
+    { name: 'Interval / VO₂max', color: '#8b5cf6', desc: 'Hard effort — short repeats for speed',         offset: -45 },
+    { name: 'Repetition',         color: '#ef4444', desc: 'Very fast — sprint / strides work',             offset: -75 },
   ];
   document.getElementById('pace-table').innerHTML = paces.map(p => `
     <div class="pace-row-item">
-      <div class="pace-dot" style="background:${p.color};color:${p.color}"></div>
+      <div class="pace-dot" style="background:${p.color}"></div>
       <div class="pace-name">${p.name}</div>
       <div class="pace-desc">${p.desc}</div>
       <div class="pace-val" style="color:${p.color}">${fmtPace(paceSec + p.offset)}<span style="color:var(--muted);font-size:0.72rem;font-weight:500"> /mi</span></div>
@@ -1265,12 +1345,12 @@ function downloadICS(provider) {
     const tempoMiles = w <= 4 ? 3 : w <= 8 ? 5 : 4;
     const easyMiles = Math.max(3, Math.round((miles - longRun - tempoMiles) / (runsPerWeek - 2)));
     const runTypes = [
-      { name: `🔵 Easy Run — ${easyMiles} mi`, desc: `Easy pace ${fmtPace(paceSec+90)}/mi.`, dur: Math.ceil(easyMiles*paceSec/3600)+1 },
-      { name: w>=3 ? `🟡 Tempo — ${tempoMiles} mi` : `🔵 Easy Run — ${easyMiles} mi`, desc: w>=3 ? `Threshold pace ${fmtPace(paceSec-20)}/mi.` : `Easy pace ${fmtPace(paceSec+90)}/mi.`, dur: 1 },
-      runsPerWeek>=5 ? { name: '🟣 Intervals — 5×800m', desc: `Interval pace ${fmtPace(paceSec-45)}/mi.`, dur: 1 } : null,
+      { name: `🔵 Easy Run — ${easyMiles} mi`, desc: `Easy pace ${fmtPace(paceSec+90)}/mi. Keep it conversational.`, dur: Math.ceil(easyMiles*paceSec/3600)+1 },
+      { name: w>=3 ? `🟡 Tempo — ${tempoMiles} mi` : `🔵 Easy Run — ${easyMiles} mi`, desc: w>=3 ? `Threshold pace ${fmtPace(paceSec-20)}/mi. Comfortably hard.` : `Easy pace ${fmtPace(paceSec+90)}/mi.`, dur: 1 },
+      runsPerWeek>=5 ? { name: '🟣 Intervals — 5×800m', desc: `Interval pace ${fmtPace(paceSec-45)}/mi. Warm up 1 mi, 5×800m, cool down 1 mi.`, dur: 1 } : null,
       { name: `🔵 Easy Run — ${easyMiles} mi`, desc: `Easy pace ${fmtPace(paceSec+90)}/mi.`, dur: Math.ceil(easyMiles*paceSec/3600)+1 },
       runsPerWeek>=6 ? { name: `🔵 Easy Run — ${easyMiles} mi`, desc: `Easy pace ${fmtPace(paceSec+90)}/mi.`, dur: Math.ceil(easyMiles*paceSec/3600)+1 } : null,
-      { name: `🟢 Long Run — ${longRun} mi`, desc: `Long run pace ${fmtPace(paceSec+60)}/mi.`, dur: Math.ceil(longRun*(paceSec+60)/3600)+1 },
+      { name: `🟢 Long Run — ${longRun} mi`, desc: `Long run pace ${fmtPace(paceSec+60)}/mi. Build aerobic base. Hydrate well.`, dur: Math.ceil(longRun*(paceSec+60)/3600)+1 },
     ].filter(Boolean).slice(0, runsPerWeek);
     offsets.slice(0, runsPerWeek).forEach((dayOff, i) => {
       const runDay = new Date(weekStart);
@@ -1278,7 +1358,7 @@ function downloadICS(provider) {
       events.push(icsEvent(`w${w}-d${dayOff}`, `Week ${w}: ${runTypes[i].name}`, runTypes[i].desc, runDay, runTypes[i].dur));
     });
   });
-  const ics = ['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Stride//Training Planner//EN','CALSCALE:GREGORIAN','METHOD:PUBLISH',`X-WR-CALNAME:Stride ${cfg.label} Training`,`X-WR-CALDESC:Your ${totalWeeks}-week ${cfg.label} training plan`,...events,'END:VCALENDAR'].join('\r\n');
+  const ics = ['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Stride//Training Planner//EN','CALSCALE:GREGORIAN','METHOD:PUBLISH',`X-WR-CALNAME:Stride ${cfg.label} Training`,`X-WR-CALDESC:Your ${totalWeeks}-week ${cfg.label} training plan from Stride`,...events,'END:VCALENDAR'].join('\r\n');
   const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
